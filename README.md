@@ -1,6 +1,9 @@
 # LIPS
 Final project for Machine Learning at Boston University
 
+```
+scp -r jcmerf@scc1.bu.edu:/projectnb/cs542sp/ainezm/mvlrs_v1/pretrain/5555* .
+```
 Notes / thoughts about data:
 
   - At least anecdotally, it looks like there's face tracking happening. THat would appear to help us a lot.
