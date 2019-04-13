@@ -5,7 +5,7 @@
 import glob, re, json
 
 text = []
-files = glob.glob('data/**/*.txt', recursive=True)
+files = glob.glob('data/**/*.txt', recursive = True)
 for file in files:
     with open(file, 'r') as opened:
         raw = opened.read().replace('\n', ' ')
