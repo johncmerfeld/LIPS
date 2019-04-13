@@ -1,6 +1,19 @@
 # LIPS
 Final project for Machine Learning at Boston University
 
+Current plan:
+
+  1. Make a dictionary over the entire timestamped dataset and see how many words are in it
+  2. Split the videos by word (take `k` evenly-spaced frames for long words
+    * consider ways of increasing the data size)
+  3. Isolate the mouth frame by frame (will need to be resized)
+  4. At this point, data are in 3-dimensional blocks and have a corresponding word
+  5. Flatten those blocks into vectors and feed to neural net -> hidden layer -> output layer is the size of the dictionary
+
+
+
+
+
 ```
 scp -r jcmerf@scc1.bu.edu:/projectnb/cs542sp/ainezm/mvlrs_v1/pretrain/5555* .
 ```

@@ -2,7 +2,7 @@
 # pull all the unique words out into a dictionary. That way we can map our 
 # outputs to numeric values.
 #cd /Users/johncmerfeld/Documents/Code/LIPS
-import glob, re
+import glob, re, json
 
 text = []
 files = glob.glob('data/**/*.txt', recursive=True)
@@ -25,6 +25,12 @@ for line in text:
             dctFreq[word] = 1
         else:
             dctFreq[word] += 1
+
+print(len(dct))
+
+with open('dct.json', 'w') as file:
+    json.dump(dct, file, sort_keys = True, indent = 2)
+
             
 """
 This leaves us with a dictionary where words map to numbers. It's sort of
