@@ -3,8 +3,8 @@ Final project for Machine Learning at Boston University
 
 Current plan:
 
-  1. Make a dictionary over the entire timestamped dataset and see how many words are in it
-  2. Split the videos by word (take `k` evenly-spaced frames for long words
+  1. Make a dictionary over the entire timestamped dataset and see how many words are in it (done!)
+  2. Split the videos by word (take `k` evenly-spaced frames for long words (partially done. Need to decide what `k` is and downsample.
     * consider ways of increasing the data size)
   3. Isolate the mouth frame by frame (will need to be resized)
   4. At this point, data are in 3-dimensional blocks and have a corresponding word

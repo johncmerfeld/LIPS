@@ -35,11 +35,15 @@ for i, textFile in enumerate(textFilenames):
             elif j % 4 == 3:
                 asdscores.append(text)
             
+        # NOTE:
+        #   so here's where we could say something like, if words[j] is not in
+        #   the "approved" dictionary, don't add it
+        #
         for j in range(len(words)):
-            textObject = {"word": words[j],
-                          "start": starts[j],
-                          "end": ends[j],
-                          "asdscore": asdscores[j]}
+            textObject = {"word" : words[j],
+                          "start" : starts[j],
+                          "end" : ends[j],
+                          "asdscore" : asdscores[j]}
             textData[i].append(textObject)
 
 def timeToFrame(time, fps):
@@ -49,9 +53,24 @@ vidData = []
 for i, vidFile in enumerate(vidFilenames):
     cap = cv2.VideoCapture(vidFile)
     fps = cap.get(cv2.CAP_PROP_FPS)
-    frame_number = timeToFrame(0.5, fps)
-    cap.set(1,frame_number); # Where frame_no is the frame you want
-    ret, frame = cap.read() # Read the frame
-    f = np.array(frame)
+    # for each word in the text:
+    for word in textData[i]:
+        
+        # get the frames of where it starts and ends
+        startFrame = timeToFrame(float(word['start']), fps)
+        endFrame = timeToFrame(float(word['end']), fps)
+        
+        # create a chunk of video frames for that time window
+        wordVid = []
+        for j in range(startFrame, endFrame):
+            cap.set(1, j)
+            ret, frame = cap.read() # Read the frame
+            wordVid.append(np.array(frame))
+        
+        vidData.append({"word" : word['word'],
+                        "data" : wordVid,
+                        "asdscore" : word['asdscore']})
+        
+        
     
 
