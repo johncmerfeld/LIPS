@@ -26,10 +26,11 @@ for line in text:
         else:
             dctFreq[word] += 1
 
-print(len(dct))
-
 with open('dct.json', 'w') as file:
     json.dump(dct, file, sort_keys = True, indent = 2)
+    
+with open('dctFreq.json', 'w') as file:
+    json.dump(dctFreq, file, sort_keys = True, indent = 2)
 
             
 """
