@@ -2,7 +2,7 @@ import json, glob, re, cv2
 import numpy as np
 
 #### GLOBAL VALUES
-frequencyThreshold = 8 # how many times must a word appear for us to include it
+frequencyThreshold = 1# how many times must a word appear for us to include it
 
 ####
 
@@ -58,7 +58,7 @@ numberOfClips = 0
 for data in textData:
     numberOfClips += len(data)
 print(numberOfClips)
-#
+
 """
 Number of clips by threshold:
     
@@ -99,7 +99,16 @@ for i, vidFile in enumerate(vidFilenames):
         vidData.append({"word" : word['word'],
                         "data" : wordVid,
                         "asdscore" : word['asdscore']})
-  
+
+## median frames per word clip (should be between 3 and 5)
+lengths = np.zeros((len(vidData)), int)
+for i in range(len(vidData)):
+    lengths[i] = len(vidData[i]['data'])
+medianFrames = np.median(lengths)
+
+import operator
+rev_x = sorted(dctFreq.items(), key=operator.itemgetter(1), reverse=True)
+    
         
     
 
