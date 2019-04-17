@@ -2,7 +2,7 @@ import json, glob, re, cv2
 import numpy as np
 
 #### GLOBAL VALUES
-frequencyThreshold = 1# how many times must a word appear for us to include it
+frequencyThreshold = 4# how many times must a word appear for us to include it
 
 ####
 
@@ -57,20 +57,6 @@ for i, textFile in enumerate(textFilenames):
 numberOfClips = 0
 for data in textData:
     numberOfClips += len(data)
-print(numberOfClips)
-
-"""
-Number of clips by threshold:
-    
-    1: 3,789
-    2: 3,005
-    4: 2,462
-    8: 1,958
-    16: 1,505
-    32: 957
-    64: 713 (just a lot of instances of very common words)
-
-"""
 
 def timeToFrame(time, fps):
     return int(time * fps)
@@ -88,6 +74,10 @@ for i, vidFile in enumerate(vidFilenames):
         startFrame = timeToFrame(float(word['start']), fps)
         endFrame = timeToFrame(float(word['end']), fps)
         
+        # for super short clips!
+        if startFrame == endFrame:
+            endFrame += 1
+        
         # create a chunk of video frames for that time window
         wordVid = np.zeros((endFrame - startFrame, height, width), dtype = int)
         for j in range(startFrame, endFrame):
@@ -104,11 +94,48 @@ for i, vidFile in enumerate(vidFilenames):
 lengths = np.zeros((len(vidData)), int)
 for i in range(len(vidData)):
     lengths[i] = len(vidData[i]['data'])
-medianFrames = np.median(lengths)
+medianFrames = int(np.median(lengths))
 
-import operator
-rev_x = sorted(dctFreq.items(), key=operator.itemgetter(1), reverse=True)
+for i in range(len(vidData)):
     
+    vid = vidData[i]['data']
+    frames = len(vid)
+
+    # Downsample or upsample depending on the clip
+    # if it is already the desired number of frames, do nothing
+    if frames != medianFrames: 
+        sampleRate = frames / medianFrames
+        print(str(medianFrames - frames) + " frames")
         
-    
+        # sample the median number of frames, repeating for shorter clips
+        samples = []
+        for j in range(medianFrames):
+            samples.append(int((sampleRate) * j))
 
+        # create new data object
+        wordVid = np.zeros((medianFrames, height, width), dtype = int)
+        for j in range(len(wordVid)):
+            wordVid[j] = vid[samples[j]]
+        
+        # replace video with sampled copy
+        vidData[i]['data'] = wordVid
+        
+#import operator
+#rev_x = sorted(dctFreq.items(), key=operator.itemgetter(1), reverse=True)
+
+with open('vidData.txt', 'w') as f:
+    for item in vidData:
+        f.write("%s\n" % item)
+    
+"""
+Number of clips by threshold:
+    
+    1: 3,789
+    2: 3,005
+    4: 2,462
+    8: 1,958
+    16: 1,505
+    32: 957
+    64: 713 (just a lot of instances of very common words)
+
+"""
