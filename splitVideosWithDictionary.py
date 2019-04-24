@@ -124,7 +124,7 @@ for i in range(len(vidData)):
 #import operator
 #rev_x = sorted(dctFreq.items(), key=operator.itemgetter(1), reverse=True)
 
-pkl.dump(vidData, open("vidData.pkl",'w'))
+pkl.dump(vidData, open("vidData.pkl","wb"))
 # with open('vidData.txt', 'w') as f:
 #     for item in vidData:
 #         f.write("%s\n" % item)

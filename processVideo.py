@@ -4,6 +4,7 @@ import imutils
 import dlib
 import cv2
 import pickle as pkl
+import json
 
 def detect_landmarks(image,shape_predictor):
 	# initialize dlib's face detector and then create
@@ -93,46 +94,54 @@ def norm_digit(im):
         (100, 100)
     )
 
-def create_label_vectors(file):
-	vidData = pkl.load(open(file,'r'))
-	badidx = np.loadtxt("badidx.txt")
-	badidx = badidx.astype(np.unit8)
+def create_feature_and_label_vectors(file):
+    
+    vidData = pkl.load(open(file,'r'))
+    
+    
+    with open('dct.json', 'r') as file:
+        dct = json.load(file)
 
+    # one-hot encode dictionary entries
+    vocabSize = len(dct) 
+    dctVector = np.zeros(len(vidData), dtype = int)
+    for i in range(len(vidData)):
+        dctVector[i] = dct[vidData[i]['word']]
 
+    b = np.zeros((len(vidData), vocabSize))
+    b[np.arange(len(vidData)), dctVector] = 1
+    
+    X = []
+    Y = []
+    badidx = []
 
-
-
-def create_feature_vectors(file):
-	vidData = pkl.load(open(file,'r'))
-	X = []
-	badidx = []
-
-	for i in range(len(vidData)):
-		feature = []
+    for i in range(len(5)):
+        feature = []
 
 		#iterate over frame
-		for frame in vidData[i]['data']:
-			frame = frame.astype(np.uint8)
-			x = create_x(frame)
+        for frame in vidData[i]['data']:
+            frame = frame.astype(np.uint8)
+            x = create_x(frame)
 
 			#if we can't detect a face, move on
-			if x is None:
-				break
-			x = x.flatten()
-			feature += list(x)
+            if x is None:
+                break
+            x = x.flatten()
+            feature += list(x)
 			# print(x.shape)
 			# cv2.imshow('image',x)
 			# cv2.waitKey(0)
 
-		if len(feature) == 50*30*4:
-			X.append(feature)
-		else:
-			badidx.append(i)
+        if len(feature) == 50*30*4:
+            X.append(feature)
+            Y.append(b[i])
+        else:
+            badidx.append(i)
 
-		print(np.array(X).shape)
+    print(np.array(X).shape)
 
-	np.savetxt("X.txt", np.array(X))
-	np.savetxt("badidx.txt", np.array(badidx))
+    np.savetxt("X.txt", np.array(X))
+    np.savetxt("badidx.txt", np.array(badidx))
 
 
 
