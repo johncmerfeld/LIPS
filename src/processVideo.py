@@ -95,7 +95,12 @@ def norm_digit(im):
 
 def create_feature_and_label_vectors(file):
     
-    vidData = pkl.load(open(file,'rb'))  
+    # load and "UN-JASONIFY" the data
+    with open('vidData.json', 'r') as file:
+        vidData = json.load(file)
+    
+    for i in range(len(vidData)):
+        vidData[i]['data'] = np.array(vidData[i]['data'])
     
     with open('dct.json', 'r') as file:
         dct = json.load(file)

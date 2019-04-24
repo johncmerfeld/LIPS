@@ -1,6 +1,9 @@
 # LIPS
 Final project for Machine Learning at Boston University
 
+```
+scp src/* jcmerf@scc1.bu.edu:/projectnb/cs542sp/jcmerf/src/
+```
 Current plan:
 
   1. Make a dictionary over the entire timestamped dataset and see how many words are in it (done!)
