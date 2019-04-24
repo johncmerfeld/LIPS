@@ -1,11 +1,9 @@
-import json, glob, re, cv2
+import json, glob, re, cv2, sys
 import numpy as np
-import pickle as pkl
+import pandas as pd
 
-#### GLOBAL VALUES
-frequencyThreshold = 100# how many times must a word appear for us to include it
-
-####
+# how many times must a word appear for us to include it
+frequencyThreshold = sys.argv[1]
 
 with open('dct.json', 'r') as file:
     dct = json.load(file)
@@ -14,8 +12,8 @@ with open('dctFreq.json', 'r') as file:
     dctFreq = json.load(file)
 
 # get parallel lists of videos and textfile names
-textFilenames = glob.glob('data/**/*.txt')
-vidFilenames = glob.glob('data/**/*.mp4')
+textFilenames = glob.glob('../ainezm/mvlrs_v1/pretrain/**/*.txt')
+vidFilenames = glob.glob('../ainezm/mvlrs_v1/pretrain/**/*.mp4')
 
 textFilenames.sort()
 vidFilenames.sort()
@@ -120,24 +118,10 @@ for i in range(len(vidData)):
         
         # replace video with sampled copy
         vidData[i]['data'] = wordVid
-        
-#import operator
-#rev_x = sorted(dctFreq.items(), key=operator.itemgetter(1), reverse=True)
 
-pkl.dump(vidData, open("vidData.pkl","wb"))
-# with open('vidData.txt', 'w') as f:
-#     for item in vidData:
-#         f.write("%s\n" % item)
-    
-"""
-Number of clips by threshold:
-    
-    1: 3,789
-    2: 3,005
-    4: 2,462
-    8: 1,958
-    16: 1,505
-    32: 957
-    64: 713 (just a lot of instances of very common words)
-
-"""
+# NOTE: "JSONifying" the numpy array
+for i in range(len(vidData)):
+    vidData[i]['data'] = vidData[i]['data'].tolist()
+     
+with open('vidData.json', 'w') as file:
+    json.dump(vidData, file)
