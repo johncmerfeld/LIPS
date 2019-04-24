@@ -66,18 +66,17 @@ def create_x(image):
 	(x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))
 	# roi = image[y:y + h, x:x + w]
 	#roi = imutils.resize(roi, width=250, height=150, inter=cv2.INTER_CUBIC)
-	
+    
 	center_h = int((y+y+h)/2)
 	center_w = int((x+x+w)/2)
 	new_h = 30
 	new_w = 50
 
 	# cropped_img = img.crop((w//2 - 50//2, h//2 - 50//2, w//2 + 50//2, h//2 + 50//2))
-
-	left = center_w-new_w/2
-	top = center_h-new_h/2
-	right = center_w+new_w/2
-	bottom = center_h+new_h/2
+	left = int(center_w-new_w/2)
+	top = int(center_h-new_h/2)
+	right = int(center_w+new_w/2)
+	bottom = int(center_h+new_h/2)
 
 	roi = image[top:bottom, left:right]
 	return roi
@@ -96,8 +95,7 @@ def norm_digit(im):
 
 def create_feature_and_label_vectors(file):
     
-    vidData = pkl.load(open(file,'r'))
-    
+    vidData = pkl.load(open(file,'rb'))  
     
     with open('dct.json', 'r') as file:
         dct = json.load(file)
@@ -115,7 +113,7 @@ def create_feature_and_label_vectors(file):
     Y = []
     badidx = []
 
-    for i in range(len(5)):
+    for i in range(5):
         feature = []
 
 		#iterate over frame
@@ -142,8 +140,8 @@ def create_feature_and_label_vectors(file):
 
     np.savetxt("X.txt", np.array(X))
     np.savetxt("badidx.txt", np.array(badidx))
-
-
+	
+    return X, Y
 
 
 
@@ -166,5 +164,5 @@ if __name__ == "__main__":
 
 	# # draw features as overlay
 	# draw_mouth_detection(image,shape)
-	create_feature_vectors("vidData.pkl")
+	create_feature_and_label_vectors("vidData.pkl")
  
