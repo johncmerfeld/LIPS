@@ -1,5 +1,6 @@
 import json, glob, re, cv2
 import numpy as np
+import pickle as pkl
 
 #### GLOBAL VALUES
 frequencyThreshold = 4# how many times must a word appear for us to include it
@@ -13,8 +14,8 @@ with open('dctFreq.json', 'r') as file:
     dctFreq = json.load(file)
 
 # get parallel lists of videos and textfile names
-textFilenames = glob.glob('data/**/*.txt', recursive = True)
-vidFilenames = glob.glob('data/**/*.mp4', recursive = True)
+textFilenames = glob.glob('data/**/*.txt')
+vidFilenames = glob.glob('data/**/*.mp4')
 
 textFilenames.sort()
 vidFilenames.sort()
@@ -105,7 +106,7 @@ for i in range(len(vidData)):
     # if it is already the desired number of frames, do nothing
     if frames != medianFrames: 
         sampleRate = frames / medianFrames
-        print(str(medianFrames - frames) + " frames")
+        #print(str(medianFrames - frames) + " frames")
         
         # sample the median number of frames, repeating for shorter clips
         samples = []
@@ -123,9 +124,10 @@ for i in range(len(vidData)):
 #import operator
 #rev_x = sorted(dctFreq.items(), key=operator.itemgetter(1), reverse=True)
 
-with open('vidData.txt', 'w') as f:
-    for item in vidData:
-        f.write("%s\n" % item)
+pkl.dump(vidData, open("vidData.pkl",'w'))
+# with open('vidData.txt', 'w') as f:
+#     for item in vidData:
+#         f.write("%s\n" % item)
     
 """
 Number of clips by threshold:
