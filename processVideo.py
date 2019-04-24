@@ -7,79 +7,79 @@ import pickle as pkl
 import json
 
 def detect_landmarks(image,shape_predictor):
-	# initialize dlib's face detector and then create
-	# the facial landmark predictor
-	detector = dlib.get_frontal_face_detector()
-	predictor = dlib.shape_predictor(shape_predictor)
+    # initialize dlib's face detector and then create
+    # the facial landmark predictor
+    detector = dlib.get_frontal_face_detector()
+    predictor = dlib.shape_predictor(shape_predictor)
 
-	# convert image to grayscale
-	#gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-	 
-	# detect a face in the grayscale image
-	try:
-		rect = detector(image, 1)[0]
+    # convert image to grayscale
+    #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+     
+    # detect a face in the grayscale image
+    try:
+        rect = detector(image, 1)[0]
 
-		# determine the facial landmarks for the face region
-		shape = predictor(image, rect)
-		shape = face_utils.shape_to_np(shape)
-		return shape
-	except:
-		return None
+        # determine the facial landmarks for the face region
+        shape = predictor(image, rect)
+        shape = face_utils.shape_to_np(shape)
+        return shape
+    except:
+        return None
 
 def draw_mouth_detection(image,shape):
 
-	(i, j) = face_utils.FACIAL_LANDMARKS_IDXS["mouth"]
-	# clone the original image so we can draw on it
-	clone = image.copy()
+    (i, j) = face_utils.FACIAL_LANDMARKS_IDXS["mouth"]
+    # clone the original image so we can draw on it
+    clone = image.copy()
 
-	# draw each mouth feature as a dot over the image
-	for (x, y) in shape[i:j]:
-		cv2.circle(clone, (x, y), 1, (0, 0, 255), -1)
+    # draw each mouth feature as a dot over the image
+    for (x, y) in shape[i:j]:
+        cv2.circle(clone, (x, y), 1, (0, 0, 255), -1)
 
-	# extract the mouth region
-	(x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))
-	roi = image[y:y + h, x:x + w]
-	roi = imutils.resize(roi, width=250, inter=cv2.INTER_CUBIC)
+    # extract the mouth region
+    (x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))
+    roi = image[y:y + h, x:x + w]
+    roi = imutils.resize(roi, width=250, inter=cv2.INTER_CUBIC)
 
-	# show the particular face part
-	cv2.imshow("ROI", roi)
-	cv2.waitKey(0)
+    # show the particular face part
+    cv2.imshow("ROI", roi)
+    cv2.waitKey(0)
 
-	# show the mouth features as an overlay
-	cv2.imshow("Image", clone)
-	cv2.waitKey(0)
+    # show the mouth features as an overlay
+    cv2.imshow("Image", clone)
+    cv2.waitKey(0)
 
-	# show all facial landmarks with an overlay
-	output = face_utils.visualize_facial_landmarks(image, shape)
-	cv2.imshow("Image", output)
-	cv2.waitKey(0)
+    # show all facial landmarks with an overlay
+    output = face_utils.visualize_facial_landmarks(image, shape)
+    cv2.imshow("Image", output)
+    cv2.waitKey(0)
 
 def create_x(image):
-	shape_predictor = "shape_predictor_68_face_landmarks.dat"
-	(i, j) = face_utils.FACIAL_LANDMARKS_IDXS["mouth"]
+    shape_predictor = "shape_predictor_68_face_landmarks.dat"
+    (i, j) = face_utils.FACIAL_LANDMARKS_IDXS["mouth"]
 
-	shape = detect_landmarks(image, shape_predictor)
-	if shape is None:
-		return None
+    shape = detect_landmarks(image, shape_predictor)
+    if shape is None:
+        return None
 
-	# extract the mouth region
-	(x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))
-	# roi = image[y:y + h, x:x + w]
-	#roi = imutils.resize(roi, width=250, height=150, inter=cv2.INTER_CUBIC)
+    # extract the mouth region
+    (x, y, w, h) = cv2.boundingRect(np.array([shape[i:j]]))
+    # roi = image[y:y + h, x:x + w]
+    #roi = imutils.resize(roi, width=250, height=150, inter=cv2.INTER_CUBIC)
     
-	center_h = int((y+y+h)/2)
-	center_w = int((x+x+w)/2)
-	new_h = 30
-	new_w = 50
+    center_h = int((y+y+h)/2)
+    center_w = int((x+x+w)/2)
+    new_h = 30
+    new_w = 50
 
-	# cropped_img = img.crop((w//2 - 50//2, h//2 - 50//2, w//2 + 50//2, h//2 + 50//2))
-	left = int(center_w-new_w/2)
-	top = int(center_h-new_h/2)
-	right = int(center_w+new_w/2)
-	bottom = int(center_h+new_h/2)
+    # cropped_img = img.crop((w//2 - 50//2, h//2 - 50//2, w//2 + 50//2, h//2 + 50//2))
+    left = int(center_w-new_w/2)
+    top = int(center_h-new_h/2)
+    right = int(center_w+new_w/2)
+    bottom = int(center_h+new_h/2)
 
-	roi = image[top:bottom, left:right]
-	return roi
+    roi = image[top:bottom, left:right]
+    return roi
 
 def norm_digit(im):
     h, w = im.shape
@@ -113,24 +113,24 @@ def create_feature_and_label_vectors(file):
     Y = []
     badidx = []
 
-    for i in range(5):
+    for i in range(len(vidData)):
         feature = []
 
-		#iterate over frame
+        #iterate over frame
         for frame in vidData[i]['data']:
             frame = frame.astype(np.uint8)
             x = create_x(frame)
 
-			#if we can't detect a face, move on
+            #if we can't detect a face, move on
             if x is None:
                 break
             x = x.flatten()
             feature += list(x)
-			# print(x.shape)
-			# cv2.imshow('image',x)
-			# cv2.waitKey(0)
+            # print(x.shape)
+            # cv2.imshow('image',x)
+            # cv2.waitKey(0)
 
-        if len(feature) == 50*30*4:
+        if len(feature) == 50*30*len(vidData[i]['data']):
             X.append(feature)
             Y.append(b[i])
         else:
@@ -138,31 +138,32 @@ def create_feature_and_label_vectors(file):
 
     print(np.array(X).shape)
 
-    np.savetxt("X.txt", np.array(X))
-    np.savetxt("badidx.txt", np.array(badidx))
-	
-    return X, Y
+    np.save("X.npy", np.array(X))
+    np.save("badidx.npy", np.array(badidx))
+    np.save("y.npy", np.array(Y))
+
+    return X,Y
 
 
 
 if __name__ == "__main__":
-	# video_path = "data/5555060020487251939/00002.mp4"
-	# shape_predictor = "shape_predictor_68_face_landmarks.dat"
-	# video = cv2.VideoCapture(video_path)
+    # video_path = "data/5555060020487251939/00002.mp4"
+    # shape_predictor = "shape_predictor_68_face_landmarks.dat"
+    # video = cv2.VideoCapture(video_path)
 
-	# # grab a frame of the video
-	# status, frame = video.read()
+    # # grab a frame of the video
+    # status, frame = video.read()
 
-	# # resize it
-	# image = imutils.resize(frame, width=500)
+    # # resize it
+    # image = imutils.resize(frame, width=500)
 
-	# # detect features 
-	# # shape is an array of tuples where shape[i] is a coordinate
-	# # (x,y) of a facial feature - the dict face_utils.FACIAL_LANDMARKS_IDXS
-	# # maps face part (mouth, nose, etc.) to start, end idxs in shape
-	# shape = detect_landmarks(image,shape_predictor)
+    # # detect features 
+    # # shape is an array of tuples where shape[i] is a coordinate
+    # # (x,y) of a facial feature - the dict face_utils.FACIAL_LANDMARKS_IDXS
+    # # maps face part (mouth, nose, etc.) to start, end idxs in shape
+    # shape = detect_landmarks(image,shape_predictor)
 
-	# # draw features as overlay
-	# draw_mouth_detection(image,shape)
-	create_feature_and_label_vectors("vidData.pkl")
+    # # draw features as overlay
+    # draw_mouth_detection(image,shape)
+    X,y = create_feature_and_label_vectors("vidData.pkl")
  
