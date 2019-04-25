@@ -4,6 +4,10 @@ import numpy as np
 # how many times must a word appear for us to include it
 limit = int(sys.argv[1])
 #frequencyThreshold = int(sys.argv[2])
+with open('approvedWords.json', 'r') as file:
+    approvedWords = json.load(file)
+
+approvedWords = approvedWords['words']
 
 # get parallel lists of videos and textfile names
 textFilenames = glob.glob('../ainezm/mvlrs_v1/pretrain/**/*.txt')
@@ -40,7 +44,7 @@ for i, textFile in enumerate(textFilenames):
             # Currently using frequency threshold but can also search for words
             # manually to keep or remove
             for j in range(len(words)):
-                if words[j] in ['TO', 'AND', 'THE']:
+                if words[j] in approvedWords:
                     textObject = {"word" : words[j],
                                   "start" : starts[j],
                                   "end" : ends[j],
