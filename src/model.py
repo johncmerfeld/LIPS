@@ -42,6 +42,9 @@ def run_cnn(train_X,train_y,test_X,test_y, num_frames, h, w):
 	          epochs=100,
 	          batch_size=128)
 	score = model.evaluate(test_X, test_y, batch_size=128)
+	preds = model.predict(test_X, batch_size=128)
+    
+	np.savetxt("preds.csv", preds, delimiter=",")
 	print(score)
 
 def unflatten_X(X, num_frames, h, w):
@@ -79,5 +82,5 @@ if __name__ == "__main__":
 	train_y = y[:split_idx]
 	test_y = y[split_idx:]
 
-	run_cnn(train_X,train_y,test_X,test_y, 3, 30, 50)
+	score = run_cnn(train_X,train_y,test_X,test_y, 3, 30, 50)
 
