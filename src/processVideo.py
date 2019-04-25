@@ -93,19 +93,33 @@ def norm_digit(im):
         (100, 100)
     )
 
+def create_label_vectors(file):
+    #273x4500 X_top3.txt
+    pass
+
+
 def create_feature_and_label_vectors(file):
-    
+
     # load and "UN-JASONIFY" the data
     with open('vidData.json', 'r') as file:
         vidData = json.load(file)
-    
+        
     for i in range(len(vidData)):
         vidData[i]['data'] = np.array(vidData[i]['data'])
     
-    with open('dct.json', 'r') as file:
-        dct = json.load(file)
-
-    # one-hot encode dictionary entries
+    # create a mapping from words to unique numbers
+    dct = dict()
+    did = 0
+    for data in vidData:
+        word = data['word']
+        if word not in dct:
+            dct[word] = did
+            did += 1
+                
+    with open('dct.json', 'w') as file:
+        json.dump(dct, file, sort_keys = True, indent = 2)
+    
+    # one-hot encode dictionary entries  
     vocabSize = len(dct) 
     dctVector = np.zeros(len(vidData), dtype = int)
     for i in range(len(vidData)):
@@ -149,6 +163,22 @@ def create_feature_and_label_vectors(file):
 
     return X,Y
 
+def fix_label_vector(X_file, y_file):
+    X = np.load(X_file)
+    y = np.load(y_file)
+    cols = set()
+    for row in y:
+        for col in range(len(row)):
+            if row[col] != 0:
+                cols.add(col)
+    print(cols)
+
+    y = y[:, list(cols)]
+
+    print (X.shape)
+    print(y.shape)
+    np.save("y_fixed.npy", y)
+
 
 
 if __name__ == "__main__":
@@ -170,5 +200,6 @@ if __name__ == "__main__":
 
     # # draw features as overlay
     # draw_mouth_detection(image,shape)
+
+
     X,y = create_feature_and_label_vectors("vidData.pkl")
- 

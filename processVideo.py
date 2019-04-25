@@ -99,11 +99,6 @@ def create_label_vectors(file):
 
 
 def create_feature_and_label_vectors(file):
-    
-    vidData = pkl.load(open(file,'rb'))  
-    
-    with open('dct.json', 'r') as file:
-        dct = json.load(file)
 
     # one-hot encode dictionary entries
     vocabSize = len(dct) 
@@ -188,4 +183,4 @@ if __name__ == "__main__":
     # draw_mouth_detection(image,shape)
 
 
-    # X,y = create_feature_and_label_vectors("vidData.pkl")
+    X,y = create_feature_and_label_vectors("vidData.pkl")

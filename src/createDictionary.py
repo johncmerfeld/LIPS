@@ -5,8 +5,11 @@ limit = int(sys.argv[1])
 
 text = []
 files = glob.glob('../ainezm/mvlrs_v1/pretrain/**/*.txt', recursive = True)
+
+files.sort()
+
 for i, file in enumerate(files):
-    if i < limit:
+    if i <= limit:
         with open(file, 'r') as opened:
             raw = opened.read().replace('\n', ' ')
             t1 = re.sub("Text:", "", raw)
