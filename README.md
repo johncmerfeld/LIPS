@@ -1,9 +1,20 @@
 # LIPS
 Final project for Machine Learning at Boston University
 
+To send changes to the cluster and test:
 ```
+# local
 scp src/* jcmerf@scc1.bu.edu:/projectnb/cs542sp/jcmerf/src/
+
+# on cluster
+bash pipeline.sh [NUMBER_OF_FILES_TO_USE]
+
+# analysis scripts to come!
+
 ```
+
+
+
 Current plan:
 
   1. Make a dictionary over the entire timestamped dataset and see how many words are in it (done!)
