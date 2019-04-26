@@ -1,6 +1,7 @@
 # LIPS
 Final project for Machine Learning at Boston University
 
+## Running experiments
 To send changes to the cluster and test:
 ```
 ## local
@@ -12,9 +13,20 @@ scc-centos7
 # run scripts, e.g.
 bash pipeline.sh 100 approvedWords1.json vidData1.json x1.npy y1.npy 30 50 pred1.csv
 
+# batch submission in progress
 # analysis scripts to come!
 
 ```
+## some notes
+`approvedWords1.json` should look like this:
+```
+{
+  "I": 1,
+  "ME": 2,
+  "YOU": 0
+}
+```
+All the other file names can just be names, they don't need to exist yet.
 
 Presentation flow:
 1. What is lip reading?
