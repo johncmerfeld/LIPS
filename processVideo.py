@@ -54,7 +54,7 @@ def draw_mouth_detection(image,shape):
     cv2.imshow("Image", output)
     cv2.waitKey(0)
 
-def create_x(image):
+def create_x(image,new_h,new_w):
     shape_predictor = "shape_predictor_68_face_landmarks.dat"
     (i, j) = face_utils.FACIAL_LANDMARKS_IDXS["mouth"]
 
@@ -69,8 +69,6 @@ def create_x(image):
     
     center_h = int((y+y+h)/2)
     center_w = int((x+x+w)/2)
-    new_h = 30
-    new_w = 50
 
     # cropped_img = img.crop((w//2 - 50//2, h//2 - 50//2, w//2 + 50//2, h//2 + 50//2))
     left = int(center_w-new_w/2)
@@ -98,7 +96,7 @@ def create_label_vectors(file):
     pass
 
 
-def create_feature_and_label_vectors(file):
+def create_feature_and_label_vectors(vidData_file, X_file, y_file, h, w):
 
     # one-hot encode dictionary entries
     vocabSize = len(dct) 
@@ -119,7 +117,7 @@ def create_feature_and_label_vectors(file):
         #iterate over frame
         for frame in vidData[i]['data']:
             frame = frame.astype(np.uint8)
-            x = create_x(frame)
+            x = create_x(frame,h,w)
 
             #if we can't detect a face, move on
             if x is None:
@@ -130,7 +128,7 @@ def create_feature_and_label_vectors(file):
             # cv2.imshow('image',x)
             # cv2.waitKey(0)
 
-        if len(feature) == 50*30*len(vidData[i]['data']):
+        if len(feature) == w*h*len(vidData[i]['data']):
             X.append(feature)
             Y.append(b[i])
         else:
@@ -138,9 +136,10 @@ def create_feature_and_label_vectors(file):
 
     print(np.array(X).shape)
 
-    np.save("X.npy", np.array(X))
+    np.save(X_file, np.array(X))
+    np.save(y_file, np.array(Y))
+
     np.save("badidx.npy", np.array(badidx))
-    np.save("y.npy", np.array(Y))
 
     return X,Y
 
@@ -182,5 +181,15 @@ if __name__ == "__main__":
     # # draw features as overlay
     # draw_mouth_detection(image,shape)
 
+    if len(sys.argv) != 6:
+        print("Usage: python model.py vidData_file_name X_file_name y_file_name frame_height frame_width")
+        exit()
 
-    X,y = create_feature_and_label_vectors("vidData.pkl")
+    vidData_file = sys.argv[1]
+    X_file = sys.argv[2]
+    y_file = sys.argv[3]
+    h = int(sys.argv[4])
+    w = int(sys.argv[5])
+
+
+    X,y = create_feature_and_label_vectors(vidData_file, X_file, y_file, h, w)

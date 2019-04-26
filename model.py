@@ -2,6 +2,7 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Convolution2D, MaxPooling2D, GlobalAveragePooling2D
 from keras.optimizers import SGD
+import sys
 
 def run_mlp(train_X,train_y,test_X, test_y):
 
@@ -23,7 +24,7 @@ def run_mlp(train_X,train_y,test_X, test_y):
 	score = model.evaluate(test_X, test_y, batch_size=128)
 	print(score)
 
-def run_cnn(train_X,train_y,test_X,test_y, num_frames, h, w):
+def run_cnn(train_X,train_y,test_X,test_y, y_pred_file, num_frames, h, w):
 	model = Sequential()
 	model.add(Convolution2D(32,(2,2),input_shape = (h,w*num_frames,1),strides=2))
 	model.add(Convolution2D(64,(3,3), activation = 'relu'))
@@ -33,7 +34,7 @@ def run_cnn(train_X,train_y,test_X,test_y, num_frames, h, w):
 	model.add(MaxPooling2D(pool_size = (2,2)))
 
 	model.add(GlobalAveragePooling2D())
-	model.add(Dropout((0.5)))
+	model.add(Dropout((0.1)))
 	model.add(Dense(train_y.shape[1], activation = 'softmax'))
 
 	model.compile(optimizer = 'adadelta', loss = 'categorical_crossentropy', metrics = ['accuracy'])
@@ -43,6 +44,8 @@ def run_cnn(train_X,train_y,test_X,test_y, num_frames, h, w):
 	          batch_size=128)
 	score = model.evaluate(test_X, test_y, batch_size=128)
 	print(score)
+	out = model.predict(test_X, batch_size=128)
+	np.save(y_pred_file, out)
 
 def unflatten_X(X, num_frames, h, w):
 	out = []
@@ -62,14 +65,29 @@ def unflatten_X(X, num_frames, h, w):
 	return out
 
 if __name__ == "__main__":
-	X_file = "X.npy"
-	y_file = "y_fixed.npy"
+	if len(sys.argv) != 6:
+		print("Usage: python model.py X_file_name y_file_name y_pred_file_name frame_height frame_width")
+		exit()
 
+	X_file = sys.argv[1]
+	y_file = sys.argv[2]
+	y_pred_file = sys.argv[3]
+	h = int(sys.argv[4])
+	w = int(sys.argv[5])
+
+	# X_file = "X.npy"
+	# y_file = "y_fixed.npy"
+	# num_frames = 3
+	# h = 30
+	# w = 50
 
 	X = np.load(X_file)
 	y = np.load(y_file)
 
-	X = unflatten_X(X, 3, 30, 50).reshape((len(X), 30,150,1))
+	#calculate num frames per sample
+	num_frames = int(X.shape[1]/(h*w))
+
+	X = unflatten_X(X, num_frames, h, w).reshape((len(X), h,num_frames*w,1))
 
 	split_idx = int(X.shape[0]*.8)
 
@@ -79,5 +97,5 @@ if __name__ == "__main__":
 	train_y = y[:split_idx]
 	test_y = y[split_idx:]
 
-	run_cnn(train_X,train_y,test_X,test_y, 3, 30, 50)
+	run_cnn(train_X,train_y,test_X,test_y, y_pred_file, num_frames, h, w)
 
