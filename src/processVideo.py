@@ -54,7 +54,7 @@ def draw_mouth_detection(image,shape):
     cv2.imshow("Image", output)
     cv2.waitKey(0)
 
-def create_x(image,new_h,new_w):
+def create_x(image, new_h, new_w):
     shape_predictor = "shape_predictor_68_face_landmarks.dat"
     (i, j) = face_utils.FACIAL_LANDMARKS_IDXS["mouth"]
 
@@ -98,9 +98,26 @@ def create_label_vectors(file):
 
 def create_feature_and_label_vectors(vidData_file, X_file, y_file, h, w):
 
-    #TODO: LOAD VIDATA FROM VIDDATA_FILE
-
-    # one-hot encode dictionary entries
+    # load and "UN-JASONIFY" the data
+    with open(vidData_file, 'r') as file:
+        vidData = json.load(file)
+        
+    for i in range(len(vidData)):
+        vidData[i]['data'] = np.array(vidData[i]['data'])
+    
+    # create a mapping from words to unique numbers
+    dct = dict()
+    did = 0
+    for data in vidData:
+        word = data['word']
+        if word not in dct:
+            dct[word] = did
+            did += 1
+                
+    with open('dct.json', 'w') as file:
+        json.dump(dct, file, sort_keys = True, indent = 2)
+    
+    # one-hot encode dictionary entries  
     vocabSize = len(dct) 
     dctVector = np.zeros(len(vidData), dtype = int)
     for i in range(len(vidData)):
@@ -130,7 +147,7 @@ def create_feature_and_label_vectors(vidData_file, X_file, y_file, h, w):
             # cv2.imshow('image',x)
             # cv2.waitKey(0)
 
-        if len(feature) == w*h*len(vidData[i]['data']):
+        if len(feature) == h*w*len(vidData[i]['data']):
             X.append(feature)
             Y.append(b[i])
         else:
@@ -195,3 +212,4 @@ if __name__ == "__main__":
 
 
     X,y = create_feature_and_label_vectors(vidData_file, X_file, y_file, h, w)
+
