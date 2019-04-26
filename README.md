@@ -13,7 +13,17 @@ scc-centos7
 # run scripts, e.g.
 bash pipeline.sh 100 approvedWords1.json vidData1.json x1.npy y1.npy 30 50 pred1.csv
 
-# batch submission in progress
+## to submit it as a batch job:
+qsub pipelineBatch.sh 200 approvedWords1.json vidData1.json x1.npy y1.npy 30 50 pred2.csv
+
+# you can check on progress with 
+qstat -u ainezm 
+# or
+qstat -u jcmerf
+
+# output will be printed to output.txt (I added a progress bar in some of the scripts)
+# errors will be printed to error.txt
+
 # analysis scripts to come!
 
 ```

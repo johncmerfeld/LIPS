@@ -58,6 +58,7 @@ def timeToFrame(time, fps):
 vidData = []
 for i, vidFile in enumerate(vidFilenames):
     if i <= limit:
+        print(((i * 100)/limit), "%", sep = "")
         cap = cv2.VideoCapture(vidFile)
         fps = cap.get(cv2.CAP_PROP_FPS)
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))

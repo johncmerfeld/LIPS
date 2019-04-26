@@ -122,6 +122,7 @@ def create_feature_and_label_vectors(vidData_file, wordFile, X_file, y_file, h, 
     badidx = []
 
     for i in range(len(vidData)):
+        print(((i * 100)/len(vidData)), "%", sep = "")
         feature = []
 
         #iterate over frame
