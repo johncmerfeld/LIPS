@@ -45,7 +45,8 @@ def run_cnn(train_X,train_y,test_X,test_y, y_pred_file, num_frames, h, w):
 	score = model.evaluate(test_X, test_y, batch_size=128)
 	print(score)
 	out = model.predict(test_X, batch_size=128)
-	np.save(y_pred_file, out)
+    
+	np.savetxt(y_pred_file, out, delimiter=",")
 
 def unflatten_X(X, num_frames, h, w):
 	out = []

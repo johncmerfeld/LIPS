@@ -3,11 +3,12 @@ import numpy as np
 
 # how many times must a word appear for us to include it
 limit = int(sys.argv[1])
-#frequencyThreshold = int(sys.argv[2])
-with open('approvedWords.json', 'r') as file:
+wordsFile = sys.argv[2]
+vidDataFile = sys.argv[3]
+with open(wordsFile, 'r') as file:
     approvedWords = json.load(file)
 
-approvedWords = approvedWords['words']
+approvedWords = approvedWords.keys()
 
 # get parallel lists of videos and textfile names
 textFilenames = glob.glob('../ainezm/mvlrs_v1/pretrain/**/*.txt')
@@ -118,5 +119,5 @@ for i in range(len(vidData)):
 for i in range(len(vidData)):
     vidData[i]['data'] = vidData[i]['data'].tolist()
      
-with open('vidData.json', 'w') as file:
+with open(vidDataFile, 'w') as file:
     json.dump(vidData, file)

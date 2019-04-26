@@ -3,8 +3,8 @@ import numpy as np
 import imutils
 import dlib
 import cv2
-import pickle as pkl
 import json
+import sys
 
 def detect_landmarks(image,shape_predictor):
     # initialize dlib's face detector and then create
@@ -96,7 +96,7 @@ def create_label_vectors(file):
     pass
 
 
-def create_feature_and_label_vectors(vidData_file, X_file, y_file, h, w):
+def create_feature_and_label_vectors(vidData_file, wordFile, X_file, y_file, h, w):
 
     # load and "UN-JASONIFY" the data
     with open(vidData_file, 'r') as file:
@@ -105,17 +105,8 @@ def create_feature_and_label_vectors(vidData_file, X_file, y_file, h, w):
     for i in range(len(vidData)):
         vidData[i]['data'] = np.array(vidData[i]['data'])
     
-    # create a mapping from words to unique numbers
-    dct = dict()
-    did = 0
-    for data in vidData:
-        word = data['word']
-        if word not in dct:
-            dct[word] = did
-            did += 1
-                
-    with open('dct.json', 'w') as file:
-        json.dump(dct, file, sort_keys = True, indent = 2)
+    with open(wordFile, 'r') as file:
+        dct = json.load(file)
     
     # one-hot encode dictionary entries  
     vocabSize = len(dct) 
@@ -200,16 +191,17 @@ if __name__ == "__main__":
     # # draw features as overlay
     # draw_mouth_detection(image,shape)
 
-    if len(sys.argv) != 6:
-        print("Usage: python model.py vidData_file_name X_file_name y_file_name frame_height frame_width")
+    if len(sys.argv) != 7:
+        print("Usage: python model.py vidData_file_name word_file_name X_file_name y_file_name frame_height frame_width")
         exit()
 
     vidData_file = sys.argv[1]
-    X_file = sys.argv[2]
-    y_file = sys.argv[3]
-    h = int(sys.argv[4])
-    w = int(sys.argv[5])
+    wordFile = sys.argv[2]
+    X_file = sys.argv[3]
+    y_file = sys.argv[4]
+    h = int(sys.argv[5])
+    w = int(sys.argv[6])
 
 
-    X,y = create_feature_and_label_vectors(vidData_file, X_file, y_file, h, w)
+    X,y = create_feature_and_label_vectors(vidData_file, wordFile, X_file, y_file, h, w)
 
