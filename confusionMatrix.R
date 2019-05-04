@@ -1,5 +1,4 @@
 library(data.table)
-library(matrixStats)
 library(ggplot2)
 
 y <- fread("y.csv")
