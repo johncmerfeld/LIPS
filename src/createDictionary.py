@@ -1,20 +1,18 @@
 import glob, re, json, sys
 
 # how many files to look at, supplied by script
-limit = int(sys.argv[1])
 
 text = []
 files = glob.glob('../ainezm/mvlrs_v1/pretrain/**/*.txt', recursive = True)
 
 files.sort()
 
-for i, file in enumerate(files):
-    if i <= limit:
-        with open(file, 'r') as opened:
-            raw = opened.read().replace('\n', ' ')
-            t1 = re.sub("Text:", "", raw)
-            t2 = re.sub("Conf: .*", "", t1)
-            text.append(t2)
+for file in files:
+    with open(file, 'r') as opened:
+        raw = opened.read().replace('\n', ' ')
+        t1 = re.sub("Text:", "", raw)
+        t2 = re.sub("Conf: .*", "", t1)
+        text.append(t2)
 
 # create a mapping from words to unique numbers
 dct = dict()
