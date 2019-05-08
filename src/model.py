@@ -34,7 +34,7 @@ def run_cnn(train_X,train_y,test_X,test_y, y_pred_file, num_frames, h, w):
 	model.add(MaxPooling2D(pool_size = (2,2)))
 
 	model.add(GlobalAveragePooling2D())
-	model.add(Dropout((0.1)))
+	model.add(Dropout((0.5)))
 	model.add(Dense(train_y.shape[1], activation = 'softmax'))
 
 	model.compile(optimizer = 'adadelta', loss = 'categorical_crossentropy', metrics = ['accuracy'])
