@@ -40,8 +40,8 @@ def run_cnn(train_X,train_y,test_X,test_y, y_pred_file, num_frames, h, w):
 	model.compile(optimizer = 'adadelta', loss = 'categorical_crossentropy', metrics = ['accuracy'])
 
 	model.fit(train_X, train_y,
-	          epochs=100,
-	          batch_size=128)
+	          epochs=200,
+	          batch_size=32)
 	score = model.evaluate(test_X, test_y, batch_size=128)
 	print(score)
 	out = model.predict(test_X, batch_size=128)
