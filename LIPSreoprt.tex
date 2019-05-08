@@ -63,6 +63,14 @@
 
 \subsection{Data}
 
+The Oxford-BBC Lip Reading Sentences 2 (LRS2) Dataset was selecting for training. Details of its creation can be found in [1]. A brief summary of the data will follow.
+
+The atomic units of raw data are video files, each around ten seconds long. The video clips come from BBC news and talk shows, but each frame's viewing window is shrunk to track the face of an individual speaker. Accompanying each video is a metadata text file; this file contains an ordered list of words spoken in the clip along with their start and end time, down to the hundredth of a second.
+
+We did not use the entirety of LRS2; we limited our study to the "pre-train" segment because the "main" segment's text files do not include word timestamps. Still, the model's potential training examples encompassed over 2 million utterances of 41,427 unique words; 47GB of data in all.
+
+
+
 \subsection{Feature Processing}
 
 \subsection{Model}
@@ -88,17 +96,8 @@ when listing the references. {\bf Remember that you can use more than eight
 
 \small
 
-[1] Alexander, J.A.\ \& Mozer, M.C.\ (1995) Template-based algorithms for
-connectionist rule extraction. In G.\ Tesauro, D.S.\ Touretzky and T.K.\ Leen
-(eds.), {\it Advances in Neural Information Processing Systems 7},
-pp.\ 609--616. Cambridge, MA: MIT Press.
-
-[2] Bower, J.M.\ \& Beeman, D.\ (1995) {\it The Book of GENESIS: Exploring
-  Realistic Neural Models with the GEneral NEural SImulation System.}  New York:
-TELOS/Springer--Verlag.
-
-[3] Hasselmo, M.E., Schnell, E.\ \& Barkai, E.\ (1995) Dynamics of learning and
-recall at excitatory recurrent synapses and cholinergic modulation in rat
-hippocampal region CA3. {\it Journal of Neuroscience} {\bf 15}(7):5249-5262.
+[1] T. Afouras, J. S. Chung, A. Senior, O. Vinyals, A. Zisserman
+Deep Audio-Visual Speech Recognition  
+arXiv:1809.02108
 
 \end{document}
