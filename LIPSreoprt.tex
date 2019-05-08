@@ -57,7 +57,24 @@
 
 \section{Introduction}
 
+Lip reading is the process of identifying spoken words purely from lip movement without any audio data. It is notoriously difficult, even for humans, but it plays a crucial role in human communication. This is highlighted by the McGurk Effect, where one phoneme's audio is transplanted on top of another phoneme's video, causing a third phoneme to be perceived [1]. Hearing impaired people especially rely on this method to understand speech without audio. Even the most skilled lip readers are able to achieve an accuracy of around 30\% of undersanding isolated words. They rely on context, body cues, and hand gestures to fill in the gaps [2]. Commonly, humans also use lip reading in cases where discreet communication is necessary or in noisy environments where audio signal is not available.
+
+With recent machine learning advances, attention has been drawn to this problem due to its many practical applications. Lip reading has promising applications in assisting hearing-impaired people. With automated lip reading, video annotation and translation become possible. Lip reading also has applications in surveillance and analysis of forensic video.
+
+In this paper, we propose LIPS, a method for lip reading via deep learning. Our method treats lip reading as a word classification problem. After extensive video processing, we use convolutional neural networks to exploit spatio-temporal features from input video data.
+
+
 \section{Related work}
+
+In recent years, there have been many advances in lip reading. Preceding work can be organized into two groups: classification systems and sequence prediction systems. 
+
+\subsection{Classification Systems}
+
+The majority of work done on this problem has been in the development of classification systems. The classification system approach performs classification over words or phonemes rather than full sentence sequence prediction. Ninomiya et.al. used Hidden Markov Models for classification of words or phonemes [3]. Sui et.al. approach the lip reading problem with Boltzmann Machines [4] and Chung et.al. propose a deep neural network framework for word classification. Their method can effectively learn and recognize hundreds of words [5]. Thabet et. al. propose novel video processing methods and show experimental results over multiple classifiers including Multi-Layer Perceptron, Naive Bayes, Support Vector Machine and Logistic Regression. Their results were very impressive with accuracy of 65\% over 5 distinct words [6].
+
+\subsection{Sequence Prediction Systems}
+
+Comparatively, much less work has been done on sequence prediction systems for lip reading. These systems aim to translate end-to-end sentences from visual data rather than single word classification. Notable work in this category was done by Graves et.al who use deep learning with recurrent networks for end-to-end speech recognition [7]. Their work, while not strictly lip reading, influenced following sequence prediction for lip reading such as the work of Assael et.al. with their system LipNet. LipNet uses convolutional neural networks to provide a distribution over sequences of phonemes and demonstrates high accuracy, especially with respect to distringuishing phonemes [8].
 
 \section{Method}
 
@@ -78,27 +95,22 @@ go at the end of the paper. Do not include acknowledgments in the anonymized
 submission, only in the final paper.
 
 \section*{References}
-
-References follow the acknowledgments. Use unnumbered first-level heading for
-the references. Any choice of citation style is acceptable as long as you are
-consistent. It is permissible to reduce the font size to \verb+small+ (9 point)
-when listing the references. {\bf Remember that you can use more than eight
-  pages as long as the additional pages contain \emph{only} cited references.}
-\medskip
-
 \small
 
-[1] Alexander, J.A.\ \& Mozer, M.C.\ (1995) Template-based algorithms for
-connectionist rule extraction. In G.\ Tesauro, D.S.\ Touretzky and T.K.\ Leen
-(eds.), {\it Advances in Neural Information Processing Systems 7},
-pp.\ 609--616. Cambridge, MA: MIT Press.
+[1] McGurk H. \ \& MacDonald J. \ (1976) Hearing lips and seeing voices. {\it Nature} {\bf 264} (5588): 746–8.
 
-[2] Bower, J.M.\ \& Beeman, D.\ (1995) {\it The Book of GENESIS: Exploring
-  Realistic Neural Models with the GEneral NEural SImulation System.}  New York:
-TELOS/Springer--Verlag.
+[2] Altieri, N. A.\ \& Pisoni, D. B. \ \& Townsend, J. T.\  (2011). Some normative data on lip-reading skills (L).{\it The Journal of the Acoustical Society of America}  {\bf 130} (1), 1–4.
 
-[3] Hasselmo, M.E., Schnell, E.\ \& Barkai, E.\ (1995) Dynamics of learning and
-recall at excitatory recurrent synapses and cholinergic modulation in rat
-hippocampal region CA3. {\it Journal of Neuroscience} {\bf 15}(7):5249-5262.
+[3]  Ninomiya, N. Kitaok\ \&, S. Tamura \ \& Y. Iribe \ \&  K. Takeda\ (2015) Integration of deep bottleneck features for audio-visual speech recognition. {\it In International Speech Communication Association}
+
+[4] C. Sui \ \& M. Bennamoun \ \& R. Togneri (2015) Listening with Your Eyes: Towards a Practical Visual Speech Recognition System Using Deep Boltzmann Machines. {\it 2015 IEEE International Conference on Computer Vision (ICCV)} 154-162.
+
+[5] J. S. Chung\ \& A. Zisserman\ (2016) Lip reading in the wild. {\it Asian Conference on Computer Vision} 87-103.
+
+[6] Z. Thabet\ \& A. Nabih, K. Azmi\ \& Y. Samy \ \& G. Khoriba and M. Elshehaly \ (2018) Lipreading using a comparative machine learning approach. {\it 2018 First International Workshop on Deep and Representation Learning (IWDRL)} 19-25.
+
+[7]  Graves \ \& N. Jaitly \ (2014) Towards end-to-end speech recognition with recurrent neural networks. {\it In International Conference on Machine Learning} 1764–1772
+
+[8] Assael, Y.M\ \& Shillingford, B. \ \& Whiteson, S. \ \& Freitas, N.D. (2016). LipNet: Sentence-level Lipreading. {\it CoRR}
 
 \end{document}
