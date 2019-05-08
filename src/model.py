@@ -100,3 +100,7 @@ if __name__ == "__main__":
 
 	run_cnn(train_X,train_y,test_X,test_y, y_pred_file, num_frames, h, w)
 
+	y_pred_base = y_pred_file.split('.')[0]
+	np.savetxt(y_pred_base + "_ground_truth.csv", test_y, delimiter = ",")
+
+

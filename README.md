@@ -6,15 +6,14 @@ To send changes to the cluster and test:
 ```
 ## local
 scp src/* jcmerf@scc1.bu.edu:/projectnb/cs542sp/jcmerf/src/
+# or 
+scp src/* ainezm@scc1.bu.edu:/projectnb/cs542sp/jcmerf/src/
 
 ## on cluster
 # load centOS 7 so we can run dlib
 scc-centos7
 # run scripts, e.g.
 bash pipeline.sh 100 approvedWords1.json vidData1.json x1.npy y1.npy 30 50 pred1.csv
-
-archive  modelData   pipeline.sh       predictions  shape_predictor_68_face_landmarks.dat  vidData
-lib	 output.txt  pipelineBatch.sh  pythonlibs   src	
 
 ## to submit it as a batch job:
 qsub pipelineBatch.sh 200 wordFiles/approvedWords1.json vidData/vidData1.json modelData/x1.npy modelData/y1.npy 30 50 predictions/pred2.csv
@@ -27,7 +26,8 @@ qstat -u jcmerf
 # output will be printed to output.txt (I added a progress bar in some of the scripts)
 # errors will be printed to error.txt
 
-# analysis scripts to come!
+## local
+scp jcmerf@scc1.bu.edu:/projectnb/cs542sp/jcmerf/predictions/* .
 
 ```
 ## some notes
