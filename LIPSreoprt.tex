@@ -27,7 +27,7 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 
-\title{LIPS: Let's think of a better title...}
+\title{LIPS: Learning Inaudible Processed Speech}
 
 
 \author{%
@@ -48,11 +48,7 @@
 \maketitle
 
 \begin{abstract}
-  The abstract paragraph should be indented \nicefrac{1}{2}~inch (3~picas) on
-  both the left- and right-hand margins. Use 10~point type, with a vertical
-  spacing (leading) of 11~points.  The word \textbf{Abstract} must be centered,
-  bold, and in point size 12. Two line spaces precede the abstract. The abstract
-  must be limited to one paragraph.
+While translating speech to text and back again has become a household technology over the past decade, many situations do not lend themselves to such audio translation. Automated lip reading provides an alternate avenue for translating speech to text. In this paper, we introduce 1) a video-processing pipeline that prepares raw video and text data for predictive modeling, 2) a deep-learning-based word classifier model on the processed data, and 3) evaluation of our model on several different vocabularies. All of this adds context to the still-burgeoning field of automated lip reading, suggesting questions for future study.
 \end{abstract}
 
 \section{Introduction}
@@ -61,7 +57,7 @@ Lip reading is the process of identifying spoken words purely from lip movement 
 
 With recent machine learning advances, attention has been drawn to this problem due to its many practical applications. Lip reading has promising applications in assisting hearing-impaired people. With automated lip reading, video annotation and translation become possible. Lip reading also has applications in surveillance and analysis of forensic video.
 
-In this paper, we propose LIPS, a method for lip reading via deep learning. Our method treats lip reading as a word classification problem. After extensive video processing, we use convolutional neural networks to exploit spatio-temporal features from input video data.
+In this paper, we propose \textit{Learning Inaudible Processed Speech} (LIPS), a method for lip reading via deep learning. Our method treats lip reading as a word classification problem. After extensive video processing, we use convolutional neural networks to exploit spatio-temporal features from input video data.
 
 \section{Related work}
 
