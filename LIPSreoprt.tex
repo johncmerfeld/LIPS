@@ -57,12 +57,11 @@
 
 \section{Introduction}
 
-Lip reading is the process of identifying spoken words purely from lip movement without any audio data. It is notoriously difficult, even for humans, but it plays a crucial role in human communication. This is highlighted by the McGurk Effect, where one phoneme's audio is transplanted on top of another phoneme's video, causing a third phoneme to be perceived [1]. Hearing impaired people especially rely on this method to understand speech without audio. Even the most skilled lip readers are able to achieve an accuracy of around 30\% of undersanding isolated words. They rely on context, body cues, and hand gestures to fill in the gaps [2]. Commonly, humans also use lip reading in cases where discreet communication is necessary or in noisy environments where audio signal is not available.
+Lip reading is the process of identifying spoken words purely from lip movement without any audio data. It is notoriously difficult, even for humans, but it plays a crucial role in human communication. This is highlighted by the McGurk Effect, where one phoneme's audio is transplanted on top of another phoneme's video, causing a third phoneme to be perceived [1]. Hearing-impaired people especially rely on this method to understand speech without audio. Even the most skilled lip readers are able to achieve an accuracy of around 30\% when identifying isolated words. They rely on context, body cues, and hand gestures to fill in the gaps [2]. Commonly, humans also use lip reading in cases where discreet communication is necessary or in noisy environments where audio signal is not available.
 
 With recent machine learning advances, attention has been drawn to this problem due to its many practical applications. Lip reading has promising applications in assisting hearing-impaired people. With automated lip reading, video annotation and translation become possible. Lip reading also has applications in surveillance and analysis of forensic video.
 
 In this paper, we propose LIPS, a method for lip reading via deep learning. Our method treats lip reading as a word classification problem. After extensive video processing, we use convolutional neural networks to exploit spatio-temporal features from input video data.
-
 
 \section{Related work}
 
@@ -90,17 +89,19 @@ We did not use the entirety of LRS2; we limited our study to the "pre-train" seg
 
 \subsection{Feature Processing}
 
-Consider an example pipeline whose output is a model that, given a video clip, predicts whether the speaker in that clip is saying the word "yes" or the word "no." So as to act within the realm of computational feasibility, we assign a parameter $N_{files}$ as a stand-in for the size of this model's training set.
+Consider an example pipeline whose output is a model that, given a video clip, predicts whether the speaker in that clip is saying the word "yes" or the word "no." So as to act within the realm of computational feasibility, we assign a parameter $N_{files}$ as an approximator for the size of this model's training set.
 
-First, a dictionary is prepared, assigning unique integer values to the strings 'YES' and 'NO'. Next, $N_{files}$ text files are parsed word by word. If a word in the file is 'YES' or 'NO,' it is recorded, along with its beginning and ending timestamps.
+First, we prepare a dictionary mapping strings to unique integers. We formally define this as a set $D = \{\hbox{'YES'}: 0, \hbox{'NO'} : 1\}$ Next, $N_{files}$ text files are parsed word by word. If a word in the file is 'YES' or 'NO,' it is recorded, along with its beginning and ending timestamps.
 
-Next, the videos corresponding to those $N_{files}$ text files are loaded and converted to greyscale. If a clip contains a word belonging to \{'YES', 'NO\}, every frame between that word's two timestamps is recorded into its own 2D array of integers between 0 and 255. Thankfully, the videos in LRS2 are already of a uniform height and width, so no resizing is necessary. Together, this list of 2D arrays composes a 3D object we call a \textbf{word clip}. Note that at this stage, audio information is no longer present in the data representing the video.
+Next, the videos corresponding to those $N_{files}$ text files are loaded and converted to greyscale. If a clip contains a word belonging to $D$, every frame between that word's two timestamps is recorded into its own 2D array of integers between 0 and 255. Thankfully, the videos in LRS2 are already of a uniform height and width, so no resizing is necessary. Together, this list of 2D arrays composes a 3D object we call a \textbf{word clip}. Note that at this stage, audio information is no longer present in the data representing the video.
 
 Of course, each word instance may be composed of a different number of frames, depending on how long the speaker took to say the word. The model, however, will expect every input to be of the same dimension. Thus, we find the median length in frames of every word clip already created. If a word clip's frame count is higher than the median, it is evenly downsampled. Word clips that are too short have some of their frames repeated until they reach the median frame count. At the end of this preliminary process, then, we have a list of data objects pairing a word with a 3D word clip object of uniform size.
 
-Talk about face detection with dlib... 
+Until now, we have dealt with word clips of the speaker's entire face. However, the model's task is far simpler if it only sees the speaker's mouth. \dots
 
-Talk about model...
+Thus, at the end of the pipeline, the model is prepared to be trained. The input vector is a flattened representation of a speaking mouth over some uniform number of frames; The target is a number that maps to some word in $D$.
+
+To generalize this pipeline, we simply redefine $D$ to include whatever words the model needs to distinguish between. To train models quickly, we can reduce $N_{files}$ and temporarily store processed video data; to validate them, we can increase $N_{files}$ to include the entire training set.
 
 \subsection{Model}
 
