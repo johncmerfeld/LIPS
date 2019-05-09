@@ -98,11 +98,15 @@ Next, the videos corresponding to those $N_{files}$ text files are loaded and co
 
 Of course, each word instance may be composed of a different number of frames, depending on how long the speaker took to say the word. The model, however, will expect every input to be of the same dimension. Thus, we find the median length in frames of every word clip already created. If a word clip's frame count is higher than the median, it is evenly downsampled. Word clips that are too short have some of their frames repeated until they reach the median frame count. At the end of this preliminary process, then, we have a list of data objects pairing a word with a 3D word clip object of uniform size.
 
-Talk about face detection with dlib... 
+We use dlib's face recognition library to detect facial fearues on each frame of each video. Dlib is a C++ library that contains a toolkit of machine learning algorithms [10]. We primarilty used "Shape Predictor 68 Face Landmarks" which extracts coordinates of 68 landmarks of the face. These landmarks represent points on the mouth, nose, eyes and so forth. We take a standard size bounding box centered around the mouth to crop each frame. This results in all frames being normalized to a standard size without affecting the aspect ratio. This method is reliable becuase our dataset contains video data centered around the face of the subject, and the videos were normalized in a previous step. This ensures that the face of the subject is roughly the same size in each video.
 
-Talk about model...
+Finally, we concatenate the frames of a video to make a long image. In the end, if each word is captured in $n$ cropped frames with dimension $h$ x $w$ then the resulting feature vector will have dimension $h$ x $nw$.
 
 \subsection{Model}
+
+Once our video data has been processed, we create label vectors via one-hot encoding. If the total dictionary has $k$ words, then we create a vector of length $k$ where each entry is 0 except at one location where it is 1. Each cell represents a word in the dictionary, and a 1 in that cell signifies a label of the corresponding word.
+
+The model we use is a convolutional neural network (CNN) because it exploits spatiotemporal features in the input image by performing stacked convolutions over the image. Our model has two convolutional layers each with reLu activation followed by max pooling. Finally, we have a global max pooling hidden layer to flatten the features and an output layer of size $k$. We take the softmax of the output to obtain probabilities of each word, and we use categorical cross entropy to train the model. For testing purposes, we assign the predicted word to be the word associated with the max entry of the output.
 
 \section{Experimental Results}
 
@@ -134,5 +138,7 @@ submission, only in the final paper.
 [8] Assael, Y.M\ \& Shillingford, B. \ \& Whiteson, S. \ \& Freitas, N.D. (2016). LipNet: Sentence-level Lipreading. {\it CoRR}
 
 [9] T. Afouras\ \& J. S. Chung\ \& A. Senior\ \& O. Vinyals\ \& A. Zisserman \ (2018). Deep Audio-Visual Speech Recognition. {\it IEEE transactions on pattern analysis and machine intelligence.}
+
+[10] R.-L. Hsu\ \& M. Abdel-Mottaleb\ \& A. K. Jain \ (2002) Face detection in color images. {\it IEEE transactions on pattern analysis and machine intelligence} {\bf 24} (5), 696-706.
 
 \end{document}
