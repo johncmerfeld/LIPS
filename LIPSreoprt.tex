@@ -27,7 +27,7 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 
-\title{LIPS: Let's think of a better title...}
+\title{LIPS: Learning Inaudible Processed Speech}
 
 
 \author{%
@@ -48,21 +48,16 @@
 \maketitle
 
 \begin{abstract}
-  The abstract paragraph should be indented \nicefrac{1}{2}~inch (3~picas) on
-  both the left- and right-hand margins. Use 10~point type, with a vertical
-  spacing (leading) of 11~points.  The word \textbf{Abstract} must be centered,
-  bold, and in point size 12. Two line spaces precede the abstract. The abstract
-  must be limited to one paragraph.
+While translating speech to text and back again has become a household technology over the past decade, many situations do not lend themselves to such audio translation. Automated lip reading provides an alternate avenue for translating speech to text. In this paper, we introduce 1) a video-processing pipeline that prepares raw video and text data for predictive modeling, 2) a deep-learning-based word classifier model on the processed data, and 3) evaluation of our model on several different vocabularies. All of this adds context to the still-burgeoning field of automated lip reading, suggesting questions for future study.
 \end{abstract}
 
 \section{Introduction}
 
-Lip reading is the process of identifying spoken words purely from lip movement without any audio data. It is notoriously difficult, even for humans, but it plays a crucial role in human communication. This is highlighted by the McGurk Effect, where one phoneme's audio is transplanted on top of another phoneme's video, causing a third phoneme to be perceived [1]. Hearing impaired people especially rely on this method to understand speech without audio. Even the most skilled lip readers are able to achieve an accuracy of around 30\% of undersanding isolated words. They rely on context, body cues, and hand gestures to fill in the gaps [2]. Commonly, humans also use lip reading in cases where discreet communication is necessary or in noisy environments where audio signal is not available.
+Lip reading is the process of identifying spoken words purely from lip movement without any audio data. It is notoriously difficult, even for humans, but it plays a crucial role in human communication. This is highlighted by the McGurk Effect, where one phoneme's audio is transplanted on top of another phoneme's video, causing a third phoneme to be perceived [1]. Hearing-impaired people especially rely on this method to understand speech without audio. Even the most skilled lip readers are able to achieve an accuracy of around 30\% when identifying isolated words. They rely on context, body cues, and hand gestures to fill in the gaps [2]. Commonly, humans also use lip reading in cases where discreet communication is necessary or in noisy environments where audio signal is not available.
 
 With recent machine learning advances, attention has been drawn to this problem due to its many practical applications. Lip reading has promising applications in assisting hearing-impaired people. With automated lip reading, video annotation and translation become possible. Lip reading also has applications in surveillance and analysis of forensic video.
 
-In this paper, we propose LIPS, a method for lip reading via deep learning. Our method treats lip reading as a word classification problem. After extensive video processing, we use convolutional neural networks to exploit spatio-temporal features from input video data.
-
+In this paper, we propose \textit{Learning Inaudible Processed Speech} (LIPS), a method for lip reading via deep learning. Our method treats lip reading as a word classification problem. After extensive video processing, we use convolutional neural networks to exploit spatio-temporal features from input video data.
 
 \section{Related work}
 
@@ -90,23 +85,25 @@ We did not use the entirety of LRS2; we limited our study to the "pre-train" seg
 
 \subsection{Feature Processing}
 
-Consider an example pipeline whose output is a model that, given a video clip, predicts whether the speaker in that clip is saying the word "yes" or the word "no." So as to act within the realm of computational feasibility, we assign a parameter $N_{files}$ as a stand-in for the size of this model's training set.
+Consider an example pipeline whose output is a model that, given a video clip, predicts whether the speaker in that clip is saying the word "yes" or the word "no." So as to act within the realm of computational feasibility, we assign a parameter $N_{files}$ as an approximator for the size of this model's training set.
 
-First, a dictionary is prepared, assigning unique integer values to the strings 'YES' and 'NO'. Next, $N_{files}$ text files are parsed word by word. If a word in the file is 'YES' or 'NO,' it is recorded, along with its beginning and ending timestamps.
+First, we prepare a dictionary mapping strings to unique integers. We formally define this as a set $D = \{\hbox{'YES'}: 0, \hbox{'NO'} : 1\}$ Next, $N_{files}$ text files are parsed word by word. If a word in the file is 'YES' or 'NO,' it is recorded, along with its beginning and ending timestamps.
 
-Next, the videos corresponding to those $N_{files}$ text files are loaded and converted to greyscale. If a clip contains a word belonging to \{'YES', 'NO\}, every frame between that word's two timestamps is recorded into its own 2D array of integers between 0 and 255. Thankfully, the videos in LRS2 are already of a uniform height and width, so no resizing is necessary. Together, this list of 2D arrays composes a 3D object we call a \textbf{word clip}. Note that at this stage, audio information is no longer present in the data representing the video.
+Next, the videos corresponding to those $N_{files}$ text files are loaded and converted to greyscale. If a clip contains a word belonging to $D$, every frame between that word's two timestamps is recorded into its own 2D array of integers between 0 and 255. Thankfully, the videos in LRS2 are already of a uniform height and width, so no resizing is necessary. Together, this list of 2D arrays composes a 3D object we call a \textbf{word clip}. Note that at this stage, audio information is no longer present in the data representing the video.
 
 Of course, each word instance may be composed of a different number of frames, depending on how long the speaker took to say the word. The model, however, will expect every input to be of the same dimension. Thus, we find the median length in frames of every word clip already created. If a word clip's frame count is higher than the median, it is evenly downsampled. Word clips that are too short have some of their frames repeated until they reach the median frame count. At the end of this preliminary process, then, we have a list of data objects pairing a word with a 3D word clip object of uniform size.
 
-We use dlib's face recognition library to detect facial fearues on each frame of each video. Dlib is a C++ library that contains a toolkit of machine learning algorithms [10]. We primarilty used "Shape Predictor 68 Face Landmarks" which extracts coordinates of 68 landmarks of the face. These landmarks represent points on the mouth, nose, eyes and so forth. We take a standard size bounding box centered around the mouth to crop each frame. This results in all frames being normalized to a standard size without affecting the aspect ratio. This method is reliable becuase our dataset contains video data centered around the face of the subject, and the videos were normalized in a previous step. This ensures that the face of the subject is roughly the same size in each video.
+Until now, we have dealt with word clips of the speaker's entire face. However, the model's task is far simpler if it only sees the speaker's mouth. We use dlib's face recognition library to detect facial fearues on each frame of each video. Dlib is a C++ library that contains a toolkit of machine learning algorithms [10]. We primarilty used "Shape Predictor 68 Face Landmarks" which extracts coordinates of 68 landmarks of the face. These landmarks represent points on the mouth, nose, eyes and so forth. We take a standard size bounding box centered around the mouth to crop each frame. This results in all frames being normalized to a standard size without affecting the aspect ratio. This method is reliable becuase our dataset contains video data centered around the face of the subject, and the videos were normalized in a previous step. This ensures that the face of the subject is roughly the same size in each video.
 
 Finally, we concatenate the frames of a video to make a long image. In the end, if each word is captured in $n$ cropped frames with dimension $h$ x $w$ then the resulting feature vector will have dimension $h$ x $nw$.
+
+Thus, at the end of the pipeline, the model is prepared to be trained. To generalize this pipeline, we simply redefine $D$ to include whatever words the model needs to distinguish between. To train models quickly, we can reduce $N_{files}$ and temporarily store processed video data; to validate them, we can increase $N_{files}$ to include the entire training set.
 
 \subsection{Model}
 
 Once our video data has been processed, we create label vectors via one-hot encoding. If the total dictionary has $k$ words, then we create a vector of length $k$ where each entry is 0 except at one location where it is 1. Each cell represents a word in the dictionary, and a 1 in that cell signifies a label of the corresponding word.
 
-The model we use is a convolutional neural network (CNN) because it exploits spatiotemporal features in the input image by performing stacked convolutions over the image. Our model has two convolutional layers each with reLu activation followed by max pooling. Finally, we have a global max pooling hidden layer to flatten the features and an output layer of size $k$. We take the softmax of the output to obtain probabilities of each word, and we use categorical cross entropy to train the model. For testing purposes, we assign the predicted word to be the word associated with the max entry of the output.
+The model we use is a convolutional neural network (CNN) because it exploits spatiotemporal features in the input image by performing stacked convolutions over the image. Our model has two convolutional layers each with reLU activation followed by max pooling. Finally, we have a global max pooling hidden layer to flatten the features and an output layer of size $k$. We take the softmax of the output to obtain probabilities of each word, and we use categorical cross entropy to train the model. For testing purposes, we assign the predicted word to be the word associated with the max entry of the output.
 
 \section{Experimental Results}
 
