@@ -26,6 +26,9 @@
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+
 
 \title{LIPS: Learning Inaudible Processed Speech}
 
@@ -78,6 +81,18 @@ Transforming video footage into a lip-reading prediction requires a significant 
 \subsection{Data}
 
 The Oxford-BBC Lip Reading Sentences 2 (LRS2) Dataset was selecting for training. Details of its creation can be found in [9]. A brief summary of the data will follow.
+
+  \begin{figure}[h!]
+ \centering
+  \includegraphics[width=0.8\textwidth]{uniqueWords}
+ \caption{A dictionary $D$ containing an entry for unique word in the dataset would have a modal character count of 7. Longer words tend to have more distinct visemes than shorter ones.}
+ \end{figure}
+ 
+   \begin{figure}[h!]
+ \centering
+  \includegraphics[width=0.8\textwidth]{wordInstances}
+ \caption{Although there are more words with a higher character count, shorter ones appear much more often in the data}
+ \end{figure}
 
 The atomic units of raw data are video files, each around ten seconds long. The video clips come from BBC news and talk shows, but each frame's viewing window is shrunk to track the face of an individual speaker. A single speaker may span multiple clips, but LRS2 was designed specifically to include as many different faces as possible. Accompanying each video is a like-named metadata text file; this file contains an ordered list of words spoken in the clip along with timestamps indicating when the speaker starts and stops saying each word. These times are precise to the hundredth of a second.
 
