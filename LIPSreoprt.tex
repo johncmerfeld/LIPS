@@ -111,7 +111,7 @@ Of course, each word instance may be composed of a different number of frames, d
    \begin{figure}[h!]
  \centering
   \includegraphics[width=0.8\textwidth]{sampling}
- \caption{In the above example, both clips must be resized to 6 frames. The first clip has frames removed at regular intervals, while the second clip has frames duplicated at regular intervals. The result is an input object of constant size.}
+ \caption{In the above example, both clips must be resized to 6 frames. The first clip has frames removed at regular intervals, while the second clip has frames duplicated at regular intervals. The result is an input object of uniform size.}
  \end{figure}
 
 Until now, we have dealt with word clips of the speaker's entire face. However, the model's task is far simpler if it only sees the speaker's mouth. We use dlib's face recognition library to detect facial fearues on each frame of each video. Dlib is a C++ library that contains a toolkit of machine learning algorithms [10]. We primarilty used "Shape Predictor 68 Face Landmarks" which extracts coordinates of 68 landmarks of the face. These landmarks represent points on the mouth, nose, eyes and so forth. We take a standard size bounding box centered around the mouth to crop each frame. This results in all frames being normalized to a standard size without affecting the aspect ratio. This method is reliable becuase our dataset contains video data centered around the face of the subject, and the videos were normalized in a previous step. This ensures that the face of the subject is roughly the same size in each video.
