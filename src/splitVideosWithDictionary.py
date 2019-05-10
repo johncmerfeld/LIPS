@@ -82,6 +82,7 @@ for i, vidFile in enumerate(vidFilenames):
                 grayFrame = np.array(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
                 wordVid[j - startFrame] = grayFrame
             
+            print(vidFile)
             vidData.append({"word" : word['word'],
                             "data" : wordVid,
                             "asdscore" : word['asdscore']})

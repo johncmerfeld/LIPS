@@ -1,8 +1,18 @@
 library(data.table)
 library(ggplot2)
 
-y <- fread("y.csv")
-y_hat <- fread("y_hat.csv")
+y <- fread("pred6_ground_truth.csv")
+y_hat <- fread("pred6.csv")
+
+colnames(y) <- c("ABOUT","THINK","GOING", 
+                 "THERE","WOULD","BECAUSE", 
+                 "REALLY","PEOPLE","SOMETHING",
+                 "WHICH", "RIGHT", "THIS")
+
+colnames(y_hat) <- c("ABOUT","THINK","GOING", 
+                 "THERE","WOULD","BECAUSE", 
+                 "REALLY","PEOPLE","SOMETHING",
+                 "WHICH", "RIGHT", "THIS")
 
 y <- toupper(names(y)[max.col(y)])
 y_hat <- toupper(names(y_hat)[max.col(y_hat)])
