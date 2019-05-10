@@ -108,6 +108,12 @@ Next, the videos corresponding to those $N_{files}$ text files are loaded and co
 
 Of course, each word instance may be composed of a different number of frames, depending on how long the speaker took to say the word. The model, however, will expect every input to be of the same dimension. Thus, we find the median length in frames of every word clip already created. If a word clip's frame count is higher than the median, it is evenly downsampled. Word clips that are too short have some of their frames repeated until they reach the median frame count. At the end of this preliminary process, then, we have a list of data objects pairing a word with a 3D word clip object of uniform size.
 
+   \begin{figure}[h!]
+ \centering
+  \includegraphics[width=0.8\textwidth]{sampling}
+ \caption{In the above example, both clips must be resized to 6 frames. The first clip has frames removed at regular intervals, while the second clip has frames duplicated at regular intervals. The result is an input object of constant size.}
+ \end{figure}
+
 Until now, we have dealt with word clips of the speaker's entire face. However, the model's task is far simpler if it only sees the speaker's mouth. We use dlib's face recognition library to detect facial fearues on each frame of each video. Dlib is a C++ library that contains a toolkit of machine learning algorithms [10]. We primarilty used "Shape Predictor 68 Face Landmarks" which extracts coordinates of 68 landmarks of the face. These landmarks represent points on the mouth, nose, eyes and so forth. We take a standard size bounding box centered around the mouth to crop each frame. This results in all frames being normalized to a standard size without affecting the aspect ratio. This method is reliable becuase our dataset contains video data centered around the face of the subject, and the videos were normalized in a previous step. This ensures that the face of the subject is roughly the same size in each video.
 
 Finally, we concatenate the frames of a video to make a long image. In the end, if each word is captured in $n$ cropped frames with dimension $h$ x $w$ then the resulting feature vector will have dimension $h$ x $nw$.
