@@ -26,6 +26,8 @@
 \usepackage{amsfonts}       % blackboard math symbols
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
+\usepackage[labelfont={bf}]{caption}
+\usepackage{booktabs,lipsum}
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 
@@ -56,7 +58,9 @@ While translating speech to text and back again has become a household technolog
 
 \section{Introduction}
 
-Lip reading is the process of identifying spoken words purely from lip movement without any audio data. It is notoriously difficult, even for humans, but it plays a crucial role in human communication. This is highlighted by the McGurk Effect, where one phoneme's audio is transplanted on top of another phoneme's video, causing a third phoneme to be perceived [1]. Hearing-impaired people especially rely on this method to understand speech without audio. Even the most skilled lip readers are able to achieve an accuracy of around 30\% when identifying isolated words. They rely on context, body cues, and hand gestures to fill in the gaps [2]. Commonly, humans also use lip reading in cases where discreet communication is necessary or in noisy environments where audio signal is not available.
+Lip reading is the process of identifying spoken words purely from lip movement without any audio data. It is notoriously difficult, even for humans, but it plays a crucial role in human communication. This is highlighted by the McGurk Effect, where one phoneme's audio is transplanted on top of another phoneme's video, causing a third phoneme to be perceived [1]. Hearing-impaired people especially rely on this method to understand speech without audio. 
+
+Even the most skilled lip readers are able to achieve an accuracy of around 30\% when identifying isolated words, however. They rely on context, body cues, and hand gestures to fill in the gaps [2]. Commonly, humans also use lip reading in cases where discreet communication is necessary or in noisy environments where audio signal is not available.
 
 With recent machine learning advances, attention has been drawn to this problem due to its many practical applications. Lip reading has promising applications in assisting hearing-impaired people. With automated lip reading, video annotation and translation become possible. Lip reading also has applications in surveillance and analysis of forensic video.
 
@@ -88,13 +92,14 @@ The Oxford-BBC Lip Reading Sentences 2 (LRS2) Dataset was selecting for training
  \caption{A dictionary $D$ containing an entry for each unique word in the dataset would have a modal character count of 7. Longer words tend to have more distinct visemes than shorter ones.}
  \end{figure}
  
+The atomic units of raw data are video files, each around ten seconds long. The video clips come from BBC news and talk shows, but each frame's viewing window is shrunk to track the face of an individual speaker. A single speaker may span multiple clips, but LRS2 was designed specifically to include as many different faces as possible. Accompanying each video is a like-named metadata text file; this file contains an ordered list of words spoken in the clip along with timestamps indicating when the speaker starts and stops saying each word. These times are precise to the hundredth of a second.
+
    \begin{figure}[h!]
  \centering
   \includegraphics[width=0.8\textwidth]{wordInstances}
  \caption{Although there are more unique words with a higher character count, shorter ones appear much more often in the data.}
  \end{figure}
 
-The atomic units of raw data are video files, each around ten seconds long. The video clips come from BBC news and talk shows, but each frame's viewing window is shrunk to track the face of an individual speaker. A single speaker may span multiple clips, but LRS2 was designed specifically to include as many different faces as possible. Accompanying each video is a like-named metadata text file; this file contains an ordered list of words spoken in the clip along with timestamps indicating when the speaker starts and stops saying each word. These times are precise to the hundredth of a second.
 
 We did not use the entirety of LRS2; we limited our study to the "pre-train" segment because the "main" segment's text files do not include word timestamps. Still, the model's potential training examples encompassed over 2 million utterances of 41,427 unique words; 47GB of data in all.
 
@@ -114,7 +119,9 @@ Of course, each word instance may be composed of a different number of frames, d
  \caption{In the above example, both clips must be resized to 6 frames. The first clip has frames removed at regular intervals, while the second clip has frames duplicated at regular intervals. The result is an input object of uniform size.}
  \end{figure}
 
-Until now, we have dealt with word clips of the speaker's entire face. However, the model's task is far simpler if it only sees the speaker's mouth. We use dlib's face recognition library to detect facial fearues on each frame of each video. Dlib is a C++ library that contains a toolkit of machine learning algorithms [10]. We primarilty used "Shape Predictor 68 Face Landmarks" which extracts coordinates of 68 landmarks of the face. These landmarks represent points on the mouth, nose, eyes and so forth. We take a standard size bounding box centered around the mouth to crop each frame. This results in all frames being normalized to a standard size without affecting the aspect ratio. This method is reliable becuase our dataset contains video data centered around the face of the subject, and the videos were normalized in a previous step. This ensures that the face of the subject is roughly the same size in each video.
+Until now, we have dealt with word clips of the speaker's entire face. However, the model's task is far simpler if it only sees the speaker's mouth. We use dlib's face recognition library to detect facial features on each frame of each video. dlib is a C++ library that contains a toolkit of machine learning algorithms [10]. We primarily used "Shape Predictor 68 Face Landmarks" which extracts coordinates of 68 landmarks of the face. These landmarks represent points on the mouth, nose, eyes and so forth. We take a standard size bounding box centered around the mouth to crop each frame. 
+
+This results in all frames being normalized to a standard size without affecting the aspect ratio. This method is reliable because our dataset contains video data centered around the face of the subject, and the videos were normalized in a previous step. This ensures that the face of the subject is roughly the same size in each video.
 
 Finally, we concatenate the frames of a video to make a long image. In the end, if each word is captured in $n$ cropped frames with dimension $h$ x $w$ then the resulting feature vector will have dimension $h$ x $nw$.
 
@@ -129,6 +136,25 @@ The model we use is a convolutional neural network (CNN) because it exploits spa
 \section{Evaluation}
 
 \subsection{Experimental setup}
+
+Our primary round of experiments were conducted on Boston University's Shared Computing Cluster (SCC). The dictionary $D_{exp}$, described in Table 1, was used. The pipeline process was run using $N_{files} = 10,000$, or about 11\% of the total data. Runs with a larger value for $N_{files}$ appeared to cause memory issues and were dropped.
+
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{$D_{exp}$ contains the words that the models were trained to classify between}
+\begin{tabular}{l*{3}{c}}
+\toprule
+                  &     Base   &   Robust   &  Cluster \\
+\midrule
+Size            &-0.000645   &-0.000645   &-0.000645   \\
+                &  (-0.83)   &  (-0.83)   &  (-0.39)   \\
+\midrule
+Observations    &     5035   &     5035   &     5035   \\
+\bottomrule
+\multicolumn{4}{l}{\footnotesize \textit{t} statistics in parentheses}\\
+\multicolumn{4}{l}{\footnotesize * p<0.10, ** p<0.05, *** p<0.01}\\
+\end{tabular}
+\end{table}
 
 \subsection{Results}
 
