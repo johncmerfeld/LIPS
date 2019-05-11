@@ -1,5 +1,5 @@
 # LIPS
-Final project for Machine Learning at Boston University
+Allison Mann & John C. Merfeld's Final project for Machine Learning at Boston University
 
 ## To build a model (graders, do this):
 
