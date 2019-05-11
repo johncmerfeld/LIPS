@@ -6,7 +6,6 @@ Final project for Machine Learning at Boston University
 
 ## For continued development on the SCC:
 
-## Running experiments
 To send changes to the cluster and test:
 ```
 ## local
