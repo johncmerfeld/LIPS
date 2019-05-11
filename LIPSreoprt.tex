@@ -189,7 +189,7 @@ Our preliminary experiment was performed over a small dictionary, $D_{prelim}$ =
 
 We expanded our result to a larger dataset consisting of 12 words in a dictionary $D_{exp}$ (see Table 1). While the preliminary result is interesting, the words in $D_{exp}$ are longer and thus their videos contain more frames and visemes. This fact also increases the size of the input and output dimension of our model significantly. We trained over 1508 samples and tested over 377 samples.
 
-With this model, we were able to obtain accuracy much higher than chance (8.33\%) at 21\% using 200 epochs and dropout of .05. We observe that it is able to classify "ABOUT", "WOULD", and "THIS" with some reliability compared to other words in this set.
+With this experiment, we were able to obtain accuracy much higher than chance (8.33\%) at 21\% using 200 epochs and dropout of .05. We observe that it is able to classify "ABOUT", "WOULD", and "THIS" with some reliability compared to other words in this set. We also see some interesting phenomena, such as that "THIS" and "THINK" are commonly swapped by the model, which makes sense qualitatively given how similar they are.
 
    \begin{figure}[h!]
  \centering
@@ -241,7 +241,7 @@ Dropout ratio  &   Model accruacy \\
 
 \section{Conclusion}
 
-We proposed LIPS, a system to classify spoken words from video input. We are able to achieve accuracy significantly higher than chance, but performance will likely improve further with more data. 
+We proposed LIPS, a system to classify spoken words from processed video input using machine learning. We introduced a video-processing pipeline that uses face recognition software and segmented videos to produce input to our model as well as a convolutional neural network word classifier. We are able to achieve accuracy significantly higher than chance over several vocabularies, and performance will likely improve further with more data. 
 
 Possible future work includes applying LIPS to larger datasets. Processing video data is expensive; it takes a lot of disk space and time. However, for performance of deep learning models, ideally we would process thousands of samples for each word.
 
