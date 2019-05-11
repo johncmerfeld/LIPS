@@ -123,6 +123,13 @@ Until now, we have dealt with word clips of the speaker's entire face. However, 
 
 This results in all frames being normalized to a standard size without affecting the aspect ratio. This method is reliable because our dataset contains video data centered around the face of the subject, and the videos were normalized in a previous step. This ensures that the face of the subject is roughly the same size in each video.
 
+   \begin{figure}[h!]
+ \centering
+  \includegraphics[width=0.8\textwidth]{dlib}
+ \caption{We used dlib's face recognition library to detect and extract the speaker's mouth in each frame. Dlib is able to detect coordinates of facial features as shown in the figure above. We take a bounding box around the points associated with the mouth for this project.}
+ \end{figure}
+
+
 Finally, we concatenate the frames of a video to make a long image. In the end, if each word is captured in $n$ cropped frames with dimension $h$ x $w$ then the resulting feature vector will have dimension $h$ x $nw$.
 
 Thus, at the end of the pipeline, the model is prepared to be trained. To generalize this pipeline, we simply redefine $D$ to include whatever words the model needs to distinguish between. To train models quickly, we can reduce $N_{files}$ and temporarily store processed video data; to validate them, we can increase $N_{files}$ to include the entire training set.
@@ -133,7 +140,15 @@ Once our video data has been processed, we create label vectors via one-hot enco
 
 The model we use is a convolutional neural network (CNN) because it exploits spatiotemporal features in the input image by performing stacked convolutions over the image. Our model has two convolutional layers each with reLU activation followed by max pooling. Finally, we have a global max pooling hidden layer to flatten the features and an output layer of size $k$. We take the softmax of the output to obtain probabilities of each word, and we use categorical cross entropy to train the model. For testing purposes, we assign the predicted word to be the word associated with the max entry of the output.
 
+   \begin{figure}[h!]
+ \centering
+  \includegraphics[width=0.8\textwidth]{model}
+ \caption{The LIPS model architecture. A sequence of $n$ frames is used as input, and is processed by two convolutional layers followed by spatial max pooling.}
+ \end{figure}
+
 \section{Evaluation}
+
+We perfomed multiple experiments over different dictionaries and sample sizes. We also experimented with hyper-parameters such as number of epochs, dropout, number of neurons on each layer of our model.
 
 \subsection{Experimental setup}
 
@@ -158,15 +173,31 @@ Observations    &     5035   &     5035   &     5035   \\
 
 \subsection{Results}
 
+Our preliminary experiment was perfomed over a small sample of words: "AND", "TO", and "THE", due to their prevalence in our dataset. We trained the CNN over 268 samples and tested over 54 samples, for a 80-20\% split. We were able to get very promising results with our model, with accuracy at 41\% with this experiment. 41\% accuracy is significantly better than chance, at 33\%. The model primarily predicted "AND" because it was the most common word in the dataset, but we can see that it was able to classify "TO" fairly reliably, likely because this word has more distinctive visemes.
+
+   \begin{figure}[h!]
+ \centering
+  \includegraphics{result1}
+ \caption{A confusion matrix for our preliminary result over a small sample dataset. LIPS achieves an accuracy of 41\%.}
+ \end{figure}
+
+We expanded our result to a larger dataset consisting of 12 words: "ABOUT", "THINK", "GOING", "THERE", "WOULD", "BECAUSE", "REALLY", "PEOPLE", "SOMETHING", "WHICH", "RIGHT", "THIS". While the preliminary result is interesting, the words in this set are longer and thus their videos contain more frames and visemes. This fact also increases the size of the input and output dimension of our model significantly. We trained over 1508 samples and tested over 377 samples.
+
+With this model, we were able to obtain accuracy much higher than chance (8.33\%) at 21\% using 200 epochs and dropout of .05. We observe that it is able to classify "ABOUT", "WOULD", and "THIS" with some reliability compared to other words in this set.
+
+   \begin{figure}[h!]
+ \centering
+  \includegraphics[width=0.8\textwidth]{result2}
+ \caption{A confusion matrix for our result over a larger sample dataset. LIPS achieves an accuracy of 21\%.}
+ \end{figure}
+
 \subsection{Tuning hyperparameters}
 
 \section{Conclusion}
 
-\subsubsection*{Acknowledgments}
+We proposed LIPS, a system to classify spoken words from video input. We are able to achieve accuracy significantly higher than chance, but performance will likely improve further with more data. 
 
-Use unnumbered third level headings for the acknowledgments. All acknowledgments
-go at the end of the paper. Do not include acknowledgments in the anonymized
-submission, only in the final paper.
+Possible future work includes applying LIPS to larger datasets. Processing video data is expensive; it takes a lot of disk space and time. However, for performance of deep learning models, ideally we would process thousands of samples for each word.
 
 \section*{References}
 \small
