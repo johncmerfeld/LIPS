@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  10 MAY 2019 11:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 MAY 2019 12:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -701,23 +701,31 @@ Package pdftex.def Info: ./images/sampling.png used on input line 113.
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [3 <./images/wordInstances.jpeg>]
-LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 142.
- [4 <./images/sampling.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 162.
- [5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 162.
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-(./LIPSreoprt.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 162.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 162.
-Package rerunfilecheck Info: File `LIPSreoprt.out' has not changed.
-(rerunfilecheck)             Checksum: FD2F15D32583D92A499A3E0898B2C5B2;557.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 162.
+ [4 <./images/sampling.png>]
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 148.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 168.
+ [5]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 168.
+ (./LIPSreoprt.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 168.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 168.
+
+
+Package rerunfilecheck Warning: File `LIPSreoprt.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `LIPSreoprt.out':
+(rerunfilecheck)             Before: FD2F15D32583D92A499A3E0898B2C5B2;557
+(rerunfilecheck)             After:  504E5B7E953EAB26C8A6839BC3B8D7B6;744.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 168.
  ) 
 Here is how much of TeX's memory you used:
- 8170 strings out of 493089
- 123478 string characters out of 6134842
+ 8173 strings out of 493089
+ 123520 string characters out of 6134842
  241133 words of memory out of 5000000
  11389 multiletter control sequences out of 15000+600000
  38080 words of font info for 125 fonts, out of 8000000 for 9000
@@ -733,10 +741,10 @@ e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/
 5/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-di
 st/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/t
 ype1/urw/times/utmri8a.pfb>
-Output written on LIPSreoprt.pdf (5 pages, 931952 bytes).
+Output written on LIPSreoprt.pdf (5 pages, 932404 bytes).
 PDF statistics:
- 118 PDF objects out of 1000 (max. 8388607)
- 98 compressed objects within 1 object stream
- 21 named destinations out of 1000 (max. 500000)
+ 122 PDF objects out of 1000 (max. 8388607)
+ 101 compressed objects within 2 object streams
+ 24 named destinations out of 1000 (max. 500000)
  23136 words of extra memory for PDF output out of 24883 (max. 10000000)
 

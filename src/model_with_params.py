@@ -24,7 +24,7 @@ def run_mlp(train_X,train_y,test_X, test_y):
 	score = model.evaluate(test_X, test_y, batch_size=128)
 	print(score)
 
-def run_cnn(train_X,train_y,test_X,test_y, y_pred_file, num_frames, h, w):
+def run_cnn(train_X,train_y,test_X,test_y, y_pred_file, num_frames, h, w, epochs):
 	model = Sequential()
 	model.add(Convolution2D(32,(2,2),input_shape = (h,w*num_frames,1),strides=2))
 	model.add(Convolution2D(64,(3,3), activation = 'relu'))
@@ -91,11 +91,11 @@ if __name__ == "__main__":
     test_y = y[split_idx:]
     
     y_pred_base = y_pred_file.split('.')[0]
-    y_pred_file = y_pred_base + "_" + epochs + ".csv"
+    y_pred_file = y_pred_base + "_" + sys.argv[6] + ".csv"
 
     run_cnn(train_X,train_y,test_X,test_y, y_pred_file, num_frames, h, w, epochs)
 
 
-    np.savetxt(y_pred_base + "_" + epochs + "_ground_truth.csv", test_y, delimiter = ",")
+    np.savetxt(y_pred_base + "_" + sys.argv[6] + "_ground_truth.csv", test_y, delimiter = ",")
 
 

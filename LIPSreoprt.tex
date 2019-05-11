@@ -126,7 +126,13 @@ Once our video data has been processed, we create label vectors via one-hot enco
 
 The model we use is a convolutional neural network (CNN) because it exploits spatiotemporal features in the input image by performing stacked convolutions over the image. Our model has two convolutional layers each with reLU activation followed by max pooling. Finally, we have a global max pooling hidden layer to flatten the features and an output layer of size $k$. We take the softmax of the output to obtain probabilities of each word, and we use categorical cross entropy to train the model. For testing purposes, we assign the predicted word to be the word associated with the max entry of the output.
 
-\section{Experimental Results}
+\section{Evaluation}
+
+\subsection{Experimental setup}
+
+\subsection{Results}
+
+\subsection{Tuning hyperparameters}
 
 \section{Conclusion}
 
