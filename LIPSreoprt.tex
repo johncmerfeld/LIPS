@@ -29,6 +29,7 @@
 \usepackage[labelfont={bf}]{caption}
 \usepackage{booktabs,lipsum}
 \usepackage{graphicx}
+\usepackage{subcaption}
 \graphicspath{{./images/}}
 
 
@@ -126,7 +127,7 @@ This results in all frames being normalized to a standard size without affecting
    \begin{figure}[h!]
  \centering
   \includegraphics[width=0.8\textwidth]{dlib}
- \caption{We used dlib's face recognition library to detect and extract the speaker's mouth in each frame. Dlib is able to detect coordinates of facial features as shown in the figure above. We take a bounding box around the points associated with the mouth for this project.}
+ \caption{We used dlib's face recognition library to detect and extract the speaker's mouth in each frame. dlib is able to detect coordinates of facial features as shown in the figure above. We take a bounding box around the points associated with the mouth for this project.}
  \end{figure}
 
 
@@ -148,32 +149,37 @@ The model we use is a convolutional neural network (CNN) because it exploits spa
 
 \section{Evaluation}
 
-We perfomed multiple experiments over different dictionaries and sample sizes. We also experimented with hyper-parameters such as number of epochs, dropout, number of neurons on each layer of our model.
+We performed multiple experiments over different dictionaries and sample sizes. We also experimented with hyper-parameters such as number of epochs, dropout, number of neurons on each layer of our model.
 
-\subsection{Experimental setup}
+The experiments were conducted on Boston University's Shared Computing Cluster (SCC). For the flagship experiment on $D_{exp}$, described in Table 1, the pipeline process was run using $N_{files} = 10,000$, or about 11\% of the total data. Runs with a larger value for $N_{files}$ appeared to cause memory issues and were aborted by the cluster. 
 
-Our primary round of experiments were conducted on Boston University's Shared Computing Cluster (SCC). The dictionary $D_{exp}$, described in Table 1, was used. The pipeline process was run using $N_{files} = 10,000$, or about 11\% of the total data. Runs with a larger value for $N_{files}$ appeared to cause memory issues and were dropped.
 
 \begin{table}[htbp]\centering
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\caption{$D_{exp}$ contains the words that the models were trained to classify between}
+\caption{$D_{exp}$ contains the words that the flagship models were trained to classify}
 \begin{tabular}{l*{3}{c}}
 \toprule
-                  &     Base   &   Robust   &  Cluster \\
+Word   &   Percentage of input set \\
 \midrule
-Size            &-0.000645   &-0.000645   &-0.000645   \\
-                &  (-0.83)   &  (-0.83)   &  (-0.39)   \\
-\midrule
-Observations    &     5035   &     5035   &     5035   \\
+ABOUT            & 10.77\%  \\
+BECAUSE                &   7.68\%   \\
+GOING                &   8.40\%   \\
+PEOPLE                &   6.26\%   \\
+REALLY                &   7.15\%   \\
+RIGHT                &   4.24\%   \\
+SOMETHING               &   3.74\%   \\
+THERE                &   8.58\%   \\
+THINK                &   9.26\%   \\
+THIS               &   19.33\%   \\
+WHICH               &   6.58\%   \\
+WOULD               &   8.01\%   \\
 \bottomrule
-\multicolumn{4}{l}{\footnotesize \textit{t} statistics in parentheses}\\
-\multicolumn{4}{l}{\footnotesize * p<0.10, ** p<0.05, *** p<0.01}\\
 \end{tabular}
 \end{table}
 
 \subsection{Results}
 
-Our preliminary experiment was perfomed over a small sample of words: "AND", "TO", and "THE", due to their prevalence in our dataset. We trained the CNN over 268 samples and tested over 54 samples, for a 80-20\% split. We were able to get very promising results with our model, with accuracy at 41\% with this experiment. 41\% accuracy is significantly better than chance, at 33\%. The model primarily predicted "AND" because it was the most common word in the dataset, but we can see that it was able to classify "TO" fairly reliably, likely because this word has more distinctive visemes.
+Our preliminary experiment was performed over a small dictionary, $D_{prelim}$ = \{"AND", "TO", "THE"\}, due to their prevalence in our dataset. We trained the CNN over 268 samples and tested over 54 samples, for a 80-20\% split. We were able to get very promising results with our model, with accuracy at 41\% with this experiment. 41\% accuracy is significantly better than random chance, at 33\%. The model primarily predicted "AND" because it was the most common word in the dataset, but we can see that it was able to classify "TO" fairly reliably, likely because this word has more distinctive visemes.
 
    \begin{figure}[h!]
  \centering
@@ -181,7 +187,7 @@ Our preliminary experiment was perfomed over a small sample of words: "AND", "TO
  \caption{A confusion matrix for our preliminary result over a small sample dataset. LIPS achieves an accuracy of 41\%.}
  \end{figure}
 
-We expanded our result to a larger dataset consisting of 12 words: "ABOUT", "THINK", "GOING", "THERE", "WOULD", "BECAUSE", "REALLY", "PEOPLE", "SOMETHING", "WHICH", "RIGHT", "THIS". While the preliminary result is interesting, the words in this set are longer and thus their videos contain more frames and visemes. This fact also increases the size of the input and output dimension of our model significantly. We trained over 1508 samples and tested over 377 samples.
+We expanded our result to a larger dataset consisting of 12 words in a dictionary $D_{exp}$ (see Table 1). While the preliminary result is interesting, the words in $D_{exp}$ are longer and thus their videos contain more frames and visemes. This fact also increases the size of the input and output dimension of our model significantly. We trained over 1508 samples and tested over 377 samples.
 
 With this model, we were able to obtain accuracy much higher than chance (8.33\%) at 21\% using 200 epochs and dropout of .05. We observe that it is able to classify "ABOUT", "WOULD", and "THIS" with some reliability compared to other words in this set.
 
@@ -192,6 +198,46 @@ With this model, we were able to obtain accuracy much higher than chance (8.33\%
  \end{figure}
 
 \subsection{Tuning hyperparameters}
+
+Additionally, hyperparameter experiments were run on the same $D_{exp}, N_{files} = 10,000$ dataset. In one test, the number of training epochs was varied between 25 and 400. In another, the dropout rate was varied between 0.2 and 0.8. As Table 2 shows, these changes generally had no significant effect on the model's accuracy.
+
+\begin{table}[!htb]
+    \caption{For the most part, neither the amount of time spent training on $D_{exp}$ nor the number of nodes dropped from the network seemed to affect the model's performance on the test set}
+    \begin{subtable}{.5\linewidth}
+      \caption{}
+      \centering
+        \begin{tabular}{l*{3}{c}}
+\toprule
+Number of epochs   &   Model accuracy\\
+\midrule
+25           & 22.28\%  \\
+50               &   21.48\%   \\
+100                &   20.69\%   \\
+200                &   22.02\%   \\
+400                &   20.42\%   \\
+
+\bottomrule
+\end{tabular}
+    \end{subtable}%
+    \begin{subtable}{.5\linewidth}
+      \centering
+        \caption{}
+        \begin{tabular}{l*{3}{c}}
+\toprule
+Dropout ratio  &   Model accruacy \\
+\midrule
+0.2           & 15.38\%  \\
+0.3                &   20.42\%   \\
+0.4                &   19.63\%   \\
+0.5                &   19.63\%   \\
+0.6                &   20.95\%   \\
+0.7                &   21.48\%   \\
+0.8               &   18.30\%   \\
+
+\bottomrule
+\end{tabular}
+    \end{subtable} 
+\end{table}
 
 \section{Conclusion}
 

@@ -1,0 +1,39 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related work}{1}{section.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Classification Systems}{1}{subsection.2.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Sequence Prediction Systems}{2}{subsection.2.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Method}{2}{section.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Data}{2}{subsection.3.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces A dictionary $D$ containing an entry for each unique word in the dataset would have a modal character count of 7. Longer words tend to have more distinct visemes than shorter ones.\relax }}{2}{figure.caption.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Although there are more unique words with a higher character count, shorter ones appear much more often in the data.\relax }}{3}{figure.caption.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Feature Processing}{3}{subsection.3.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces In the above example, both clips must be resized to 6 frames. The first clip has frames removed at regular intervals, while the second clip has frames duplicated at regular intervals. The result is an input object of uniform size.\relax }}{4}{figure.caption.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces We used dlib's face recognition library to detect and extract the speaker's mouth in each frame. dlib is able to detect coordinates of facial features as shown in the figure above. We take a bounding box around the points associated with the mouth for this project.\relax }}{4}{figure.caption.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Model}{4}{subsection.3.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The LIPS model architecture. A sequence of $n$ frames is used as input, and is processed by two convolutional layers followed by spatial max pooling.\relax }}{5}{figure.caption.6}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Evaluation}{5}{section.4}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces $D_{exp}$ contains the words that the flagship models were trained to classify\relax }}{5}{table.caption.7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Results}{5}{subsection.4.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces A confusion matrix for our preliminary result over a small sample dataset. LIPS achieves an accuracy of 41\%.\relax }}{6}{figure.caption.8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces A confusion matrix for our result over a larger sample dataset. LIPS achieves an accuracy of 21\%.\relax }}{6}{figure.caption.9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Tuning hyperparameters}{6}{subsection.4.2}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces For the most part, neither the amount of time spent training on $D_{exp}$ nor the number of nodes dropped from the network seemed to affect the model's performance on the test set\relax }}{7}{table.caption.10}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{7}{section.5}}
