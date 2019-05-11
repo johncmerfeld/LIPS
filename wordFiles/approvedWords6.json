@@ -1,0 +1,15 @@
+{
+  "ABOUT" : 0,
+  "THINK" : 1, 
+  "GOING" : 2,
+  "THERE" : 3,
+  "WOULD" : 4,
+  "BECAUSE" : 5,
+  "REALLY" : 6,
+  "PEOPLE" : 7,
+  "SOMETHING" : 8,
+  "WHICH" : 9,
+  "RIGHT" : 10,
+  "THIS" : 11
+  
+}
