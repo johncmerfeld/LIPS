@@ -139,9 +139,13 @@ The model we use is a convolutional neural network (CNN) because it exploits spa
  \caption{The LIPS model architecture. A sequence of $n$ frames is used as input, and is processed by two convolutional layers followed by spatial max pooling.}
  \end{figure}
 
-\section{Experimental Results}
+\section{Evaluation}
 
-We perfomed multiple experiments over different dictionary and sample sizes. We also experimented with hyper-parameters such as number of epochs, dropout, number of neurons on each layer of our model.
+We perfomed multiple experiments over different dictionaries and sample sizes. We also experimented with hyper-parameters such as number of epochs, dropout, number of neurons on each layer of our model.
+
+\subsection{Experimental setup}
+
+\subsection{Results}
 
 Our preliminary experiment was perfomed over a small sample of words: "AND", "TO", and "THE", due to their prevalence in our dataset. We trained the CNN over 268 samples and tested over 54 samples, for a 80-20\% split. We were able to get very promising results with our model, with accuracy at 41\% with this experiment. 41\% accuracy is significantly better than chance, at 33\%. The model primarily predicted "AND" because it was the most common word in the dataset, but we can see that it was able to classify "TO" fairly reliably, likely because this word has more distinctive visemes.
 
@@ -161,9 +165,13 @@ With this model, we were able to obtain accuracy much higher than chance (8.33\%
  \caption{A confusion matrix for our result over a larger sample dataset. LIPS achieves an accuracy of 21\%.}
  \end{figure}
 
+\subsection{Tuning hyperparameters}
+
 \section{Conclusion}
 
-We proposed LIPS, a system to classify spoken words from video input. We are able to achieve accuracy significantly higher than chance, but performance will likely improve further with more data. Possible future work includes applying LIPS to larger datasets. Processing video data is expensive; it takes a lot of disk space and time. 
+We proposed LIPS, a system to classify spoken words from video input. We are able to achieve accuracy significantly higher than chance, but performance will likely improve further with more data. 
+
+Possible future work includes applying LIPS to larger datasets. Processing video data is expensive; it takes a lot of disk space and time. However, for performance of deep learning models, ideally we would process thousands of samples for each word.
 
 \section*{References}
 \small
