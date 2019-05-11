@@ -3,6 +3,17 @@ Final project for Machine Learning at Boston University
 
 ## To build a model (graders, do this):
 
+  - Make sure Python 3, dlib, imutils, opencv, and Tensorflow/Keras are installed
+
+  - Run the pipeline script, which should handle all steps from reading the raw data to creating the model
+
+```
+bash pipeline.sh 100 wordFiles/approvedWords.json vidData/vidData.json modelData/x.npy modelData/y.npy 30 50 predictions/pred.csv
+```
+
+This will create two CSV files in the `predictions` folder: `pred.csv` and `pred_ground_truth.csv`. The first has the model's probability output for each class. The second has the actual class vectors.
+
+  - To evaluate the model for both topline accuracy and confusion matrix, follow the procedures in `R/confusionMatrix.R`
 
 ## For continued development on the SCC:
 

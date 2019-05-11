@@ -11,8 +11,8 @@ with open(wordsFile, 'r') as file:
 approvedWords = approvedWords.keys()
 
 # get parallel lists of videos and textfile names
-textFilenames = glob.glob('../ainezm/mvlrs_v1/pretrain/**/*.txt')
-vidFilenames = glob.glob('../ainezm/mvlrs_v1/pretrain/**/*.mp4')
+textFilenames = glob.glob('test_data/**/*.txt')
+vidFilenames = glob.glob('test_data/**/*.mp4')
 
 textFilenames.sort()
 vidFilenames.sort()
@@ -58,7 +58,6 @@ def timeToFrame(time, fps):
 vidData = []
 for i, vidFile in enumerate(vidFilenames):
     if i <= limit:
-        print(((i * 100)/limit), "%", sep = "")
         cap = cv2.VideoCapture(vidFile)
         fps = cap.get(cv2.CAP_PROP_FPS)
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -82,7 +81,6 @@ for i, vidFile in enumerate(vidFilenames):
                 grayFrame = np.array(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
                 wordVid[j - startFrame] = grayFrame
             
-            print(vidFile)
             vidData.append({"word" : word['word'],
                             "data" : wordVid,
                             "asdscore" : word['asdscore']})
